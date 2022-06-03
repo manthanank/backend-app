@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 // create State schema & model
 const StateSchema = new Schema({
-    districtName: {
+    stateName: {
         type: String,
     }
 });
