@@ -4,6 +4,13 @@ const mongoose = require('mongoose');
 // set up our express app
 const app = express();
 
+const cors = require('cors');
+app.use(
+    cors({
+        origin: 'http://localhost:4200'
+    })
+)
+
 // connect to mongodb
 mongoose.connect('mongodb://localhost:27017');
 mongoose.Promise = global.Promise;
