@@ -3,10 +3,10 @@ const Schema = mongoose.Schema;
 
 // create data schema & model
 const DataSchema = new Schema({
-    stateName: {
+    firstName: {
         type: String,
     },
-    districtName: {
+    lastName: {
         type: String,
     }
 });
