@@ -19,13 +19,7 @@ app.use(express.static('public'));
 
 app.use(express.json());
 // initialize routes
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-  })
 
-  app.get('/api', (req, res) => {
-    res.send('API')
-  })
 app.use('/api',require('./routes/api'));
 app.use('/api',require('./routes/states_api'));
 app.use('/api',require('./routes/districts_api'));
