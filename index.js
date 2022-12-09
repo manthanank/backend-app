@@ -10,12 +10,28 @@ app.use(
     origin: "*",
   })
 );
-
+require("dotenv").config();
 // connect to mongodb
-mongoose.connect("mongodb://localhost:27017");
-mongoose.Promise = global.Promise;
+//mongoose.connect("mongodb://localhost:27017");
+mongoose
+  .connect(
+    "mongodb+srv://manthanank:" +
+      process.env.MONGO_ATLAS_PW +
+      "@cluster0.re3ha3x.mongodb.net/backend"
+    // "mongodb+srv://max:QuBqs0T45GDKPlIG@cluster0-ntrwp.mongodb.net/node-angular?retryWrites=true"
+  )
+  .then(() => {
+    console.log("Connected to database!");
+  })
+  .catch(() => {
+    console.log("Connection failed!");
+  });
 
 app.use(express.static("public"));
+
+app.get("/", function (req, res) {
+  res.sendFile(path.join(__dirname, "public/index.html"));
+});
 
 app.use(express.json());
 // initialize routes
