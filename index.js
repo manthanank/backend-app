@@ -37,8 +37,8 @@ app.use(express.json());
 // initialize routes
 
 app.use("/api", require("./routes/api"));
-app.use("/api", require("./routes/states_api"));
-app.use("/api", require("./routes/districts_api"));
+app.use("/api", require("./routes/states"));
+app.use("/api", require("./routes/districts"));
 
 // error handling middleware
 app.use(function (err, req, res, next) {
