@@ -35,7 +35,7 @@ app.use(express.json());
 app.use("/api", require("./routes/data"));
 app.use("/api", require("./routes/states"));
 app.use("/api", require("./routes/districts"));
-app.use("/api", require("./routes/simpleapi"));
+app.use("/api", require("./routes/simpleapis"));
 
 
 app.use(function (err, req, res, next) {
