@@ -6,6 +6,14 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
+const cloudinary = require('cloudinary').v2;
+
+cloudinary.config({
+  cloud_name: process.env.cloud_name,
+  api_key: process.env.api_key,
+  api_secret: process.env.api_secret
+});
+
 // const serviceAccount = require("./serviceAccountKey.json");
 // const admin = require('firebase-admin');
 
@@ -38,6 +46,7 @@ app.use(express.json());
 //   });
 
 app.use("/api", require("./routes/data"));
+app.use("/api", require("./routes/image"));
 app.use("/api", require("./routes/users"));
 app.use("/api", require("./routes/states"));
 app.use("/api", require("./routes/districts"));
