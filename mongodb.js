@@ -9,7 +9,7 @@ mongoose
       "@cluster0.re3ha3x.mongodb.net/backend"
   )
   .then(() => {
-    console.log("Connected to database!");
+    console.log("Connected to MongoDB database!");
   })
   .catch(() => {
     console.log("Connection failed!");

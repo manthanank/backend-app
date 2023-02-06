@@ -6,7 +6,14 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
+// const serviceAccount = require("./serviceAccountKey.json");
+// const admin = require('firebase-admin');
+
 require("dotenv").config();
+
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount)
+// });
 
 app.use(
   cors({
@@ -31,6 +38,7 @@ app.use(express.json());
 //   });
 
 app.use("/api", require("./routes/data"));
+app.use("/api", require("./routes/user"));
 app.use("/api", require("./routes/users"));
 app.use("/api", require("./routes/states"));
 app.use("/api", require("./routes/districts"));
@@ -39,7 +47,7 @@ app.use("/api", require("./routes/simpleapis"));
 //   res.status(422).send({ error: err.message });
 // });
 
-app.get("/", function (req, res) {
+app.get("/", async (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
