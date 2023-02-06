@@ -8,6 +8,12 @@ router.get('/blogs',(req,res,next) =>{
     }).catch(next);
 });
 
+router.get('/blogs/:id', (req, res, next) => {
+    Blogs.findOne({ _id: req.params.id }).then((data) => {
+        res.send(data);
+    });
+});
+
 router.post('/blogs',(req,res,next) =>{
     Blogs.create(req.body).then((data) =>{
         res.send(data);
