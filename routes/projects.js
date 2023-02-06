@@ -8,6 +8,12 @@ router.get('/projects',(req,res,next) =>{
     }).catch(next);
 });
 
+router.get('/projects/:id', (req, res, next) => {
+    Projects.findOne({ _id: req.params.id }).then((data) => {
+        res.send(data);
+    });
+});
+
 router.post('/projects',(req,res,next) =>{
     Projects.create(req.body).then((data) =>{
         res.send(data);
