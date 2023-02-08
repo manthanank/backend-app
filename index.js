@@ -7,6 +7,8 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const mysql = require('mysql2')
 const cloudinary = require('cloudinary').v2;
+const { graphqlHTTP } = require('express-graphql');
+const { buildSchema } = require('graphql');
 
 const connection = mysql.createConnection(process.env.DATABASE_URL);
 
@@ -63,9 +65,27 @@ app.get("/", async (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
+const schema = buildSchema(`
+  type Query {
+    hello: String
+  }
+`);
+
+const root = {
+  hello: () => {
+    return 'Hello world!';
+  },
+};
+
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  rootValue: root,
+  graphiql: true,
+}));
+
 console.log('Connected to PlanetScale!')
 // connection.end()
 
 app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+  console.log(`Server started on port ${PORT} and GraphQL server listening on port ${PORT}/graphql`);
 });
