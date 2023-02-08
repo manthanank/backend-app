@@ -5,12 +5,12 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const mysql = require('mysql2')
+// const mysql = require('mysql2')
 const cloudinary = require('cloudinary').v2;
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 
-const connection = mysql.createConnection(process.env.DATABASE_URL);
+// const connection = mysql.createConnection(process.env.DATABASE_URL);
 
 cloudinary.config({
   cloud_name: process.env.cloud_name,
@@ -83,7 +83,7 @@ app.use('/graphql', graphqlHTTP({
   graphiql: true,
 }));
 
-console.log('Connected to PlanetScale!')
+// console.log('Connected to PlanetScale!')
 // connection.end()
 
 app.listen(PORT, () => {
