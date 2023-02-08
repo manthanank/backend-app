@@ -5,8 +5,10 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
-
+const mysql = require('mysql2')
 const cloudinary = require('cloudinary').v2;
+
+const connection = mysql.createConnection(process.env.DATABASE_URL);
 
 cloudinary.config({
   cloud_name: process.env.cloud_name,
@@ -61,6 +63,9 @@ app.get("/", async (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
+console.log('Connected to PlanetScale!')
+// connection.end()
+
 app.listen(PORT, () => {
-  console.log(`server started on port ${PORT}`);
+  console.log(`Server started on port ${PORT}`);
 });
