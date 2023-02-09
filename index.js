@@ -55,6 +55,7 @@ app.use("/api", require("./routes/users"));
 app.use("/api", require("./routes/states"));
 app.use("/api", require("./routes/districts"));
 app.use("/api", require("./routes/simpleapis"));
+app.use("/api", require("./routes/ossinsight"));
 app.use("/api", require("./routes/blogs"));
 app.use("/api", require("./routes/projects"));
 // app.use(function (err, req, res, next) {
