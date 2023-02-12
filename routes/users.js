@@ -3,22 +3,24 @@ const Users = require('../models/users.js');
 const router = express.Router();
 const ObjectId = require('mongoose').Types.ObjectId;
 
+const controller = require('../controllers/users');
+router.get('/', controller.getUsers);
 // get users request
 // router.get('/users',(req,res,next) => {
 //     Users.find({}).then((data) =>{
 //         res.send(data);
 //     }).catch(next);
 // });
-router.get('/users', (req, res) => {
-    Users.find((err, doc) => {
-        if (err) {
-            console.log('Error While Getting' + err);
-        }
-        else {
-            res.send(doc);
-        }
-    })
-});
+// router.get('/users', (req, res) => {
+//     Users.find((err, doc) => {
+//         if (err) {
+//             console.log('Error While Getting' + err);
+//         }
+//         else {
+//             res.send(doc);
+//         }
+//     })
+// });
 
 // get users by id request
 // router.get('/users/:id', (req, res, next) => {
