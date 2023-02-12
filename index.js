@@ -50,14 +50,11 @@ app.use(express.json());
 //   });
 
 app.use("/api", require("./routes/data"));
-app.use("/api", require("./routes/image"));
 app.use("/api", require("./routes/users"));
 app.use("/api", require("./routes/states"));
 app.use("/api", require("./routes/districts"));
 app.use("/api", require("./routes/simpleapis"));
 app.use("/api", require("./routes/ossinsight"));
-app.use("/api", require("./routes/blogs"));
-app.use("/api", require("./routes/projects"));
 // app.use(function (err, req, res, next) {
 //   res.status(422).send({ error: err.message });
 // });
