@@ -7,6 +7,7 @@ const cloudinary = require('cloudinary').v2;
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 // const mysql = require('mysql2')
+const mongoose = require('./mongodb.js');
 
 // const connection = mysql.createConnection(process.env.DATABASE_URL);
 
