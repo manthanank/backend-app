@@ -6,10 +6,24 @@ const bodyParser = require("body-parser");
 const cloudinary = require('cloudinary').v2;
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
+const mongoose = require('mongoose');
 // const mysql = require('mysql2')
-const mongoose = require('./mongodb.js');
 
 // const connection = mysql.createConnection(process.env.DATABASE_URL);
+require("dotenv").config();
+
+mongoose
+  .connect(
+    "mongodb+srv://manthanank:" +
+    process.env.MONGO_ATLAS_PW +
+    "@cluster0.re3ha3x.mongodb.net/backend"
+  )
+  .then(() => {
+    console.log("Connected to MongoDB database!");
+  })
+  .catch(() => {
+    console.log("Connection failed!");
+  });
 
 cloudinary.config({
   cloud_name: process.env.cloud_name,
@@ -72,5 +86,6 @@ app.use('/graphql', graphqlHTTP({
 // connection.end()
 
 app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT} and GraphQL server listening on port ${PORT}/graphql`);
+  console.log(`Server started on port ${PORT}`);
+  console.log(`GraphQL server listening on port ${PORT}/graphql`);
 });
