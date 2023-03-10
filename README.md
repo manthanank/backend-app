@@ -8,7 +8,3 @@
 - ✅Dotenv
 - ✅Body Parser
 - ✅Axios
-- ✅Firebase
-- ✅Firebase Admin
-- ✅Cloudinary
-- ✅Planetscale
