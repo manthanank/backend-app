@@ -4,39 +4,51 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cloudinary = require('cloudinary').v2;
+// const mongoose = require('mongoose');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
-const mongoose = require('mongoose');
-// const mysql = require('mysql2')
+const { MongoClient } = require('mongodb');
 
-// const connection = mysql.createConnection(process.env.DATABASE_URL);
 require("dotenv").config();
 
-mongoose
-  .connect(
-    "mongodb+srv://manthanank:" +
-    process.env.MONGO_ATLAS_PW +
-    "@cluster0.re3ha3x.mongodb.net/backend"
-  )
-  .then(() => {
-    console.log("Connected to MongoDB database!");
-  })
-  .catch(() => {
-    console.log("Connection failed!");
-  });
+const dbUser = process.env.MONGODB_USER;
+const dbPassword = process.env.MONGODB_PASSWORD;
+
+//method 1
+// mongoose
+//   .connect(
+//     "mongodb+srv://manthanank" + ":" +
+//     process.env.MONGO_ATLAS_PW +
+//     "@cluster0.re3ha3x.mongodb.net/backend"
+
+//       `mongodb+srv://${dbUser}:${dbPassword}@cluster0.re3ha3x.mongodb.net/backend`
+//   )
+//   .then(() => {
+//     console.log("Connected to MongoDB database!");
+//   })
+//   .catch(() => {
+//     console.log("Connection failed!");
+//   });
+
+//method2 (secured)
+const uri = `mongodb+srv://${dbUser}:${dbPassword}@cluster0.re3ha3x.mongodb.net/backend`;
+
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const connect = async () => {
+  try {
+    await client.connect();
+    console.log('Connected successfully to MongoDB');
+  } catch (err) {
+    console.error(err);
+  }
+}
+connect();
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET
 });
-
-// const serviceAccount = require("./serviceAccountKey.json");
-// const admin = require('firebase-admin');
-
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount)
-// });
 
 app.use(
   cors({
