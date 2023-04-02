@@ -4,45 +4,25 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cloudinary = require('cloudinary').v2;
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
-const { MongoClient } = require('mongodb');
 
 require("dotenv").config();
 
 const dbUser = process.env.MONGODB_USER;
 const dbPassword = process.env.MONGODB_PASSWORD;
 
-//method 1
-// mongoose
-//   .connect(
-//     "mongodb+srv://manthanank" + ":" +
-//     process.env.MONGO_ATLAS_PW +
-//     "@cluster0.re3ha3x.mongodb.net/backend"
-
-//       `mongodb+srv://${dbUser}:${dbPassword}@cluster0.re3ha3x.mongodb.net/backend`
-//   )
-//   .then(() => {
-//     console.log("Connected to MongoDB database!");
-//   })
-//   .catch(() => {
-//     console.log("Connection failed!");
-//   });
-
-//method2 (secured)
-const uri = `mongodb+srv://${dbUser}:${dbPassword}@cluster0.re3ha3x.mongodb.net/backend`;
-
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-const connect = async () => {
-  try {
-    await client.connect();
-    console.log('Connected successfully to MongoDB');
-  } catch (err) {
-    console.error(err);
-  }
-}
-connect();
+mongoose
+  .connect(
+    `mongodb+srv://${dbUser}:${dbPassword}@cluster0.re3ha3x.mongodb.net/backend`
+  )
+  .then(() => {
+    console.log("Connected to MongoDB database!");
+  })
+  .catch(() => {
+    console.log("Connection failed!");
+  });
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
