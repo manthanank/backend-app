@@ -39,6 +39,14 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 app.use(express.json());
 
+// portfolio blogs
+app.use("/api", require("./routes/blogs"));
+// portfolio projects
+app.use("/api", require("./routes/projects"));
+// portfolio uses
+app.use("/api", require("./routes/uses.js"));
+
+
 app.use("/api", require("./routes/data"));
 app.use("/api", require("./routes/users"));
 app.use("/api", require("./routes/states"));
