@@ -3,10 +3,7 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const cloudinary = require('cloudinary').v2;
 const mongoose = require('mongoose');
-const { graphqlHTTP } = require('express-graphql');
-const { buildSchema } = require('graphql');
 
 require("dotenv").config();
 
@@ -23,12 +20,6 @@ mongoose
   .catch(() => {
     console.log("Connection failed!");
   });
-
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET
-});
 
 app.use(
   cors({
@@ -62,28 +53,6 @@ app.get("/", async (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
-const schema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`);
-
-const root = {
-  hello: () => {
-    return 'Hello world!';
-  },
-};
-
-app.use('/graphql', graphqlHTTP({
-  schema: schema,
-  rootValue: root,
-  graphiql: true,
-}));
-
-// console.log('Connected to PlanetScale!')
-// connection.end()
-
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
-  console.log(`GraphQL server listening on port ${PORT}/graphql`);
 });
