@@ -6,7 +6,7 @@ This is the backend application for a project. It is built using Node.js and Exp
 
 ## Installation
 
-1. Clone the repository: `git clone <repository-url>`
+1. Clone the repository: `git clone https://github.com/manthanank/backend-app.git`
 2. Navigate to the project directory: `cd backend-app`
 3. Install dependencies: `npm install`
 
