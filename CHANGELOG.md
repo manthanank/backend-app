@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/manthanank/backend-app/compare/v1.3.0...v1.4.0) (2024-01-30)
+
+
+### Features
+
+* updated ([6c33770](https://github.com/manthanank/backend-app/commit/6c33770f351793092ea484368ca1660bb7030088))
+
+
+
 # [1.3.0](https://github.com/manthanank/backend-app/compare/v1.2.0...v1.3.0) (2024-01-30)
 
 
