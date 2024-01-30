@@ -44,6 +44,7 @@ app.use("/api", require("./routes/states"));
 app.use("/api", require("./routes/districts"));
 app.use("/api", require("./routes/simpleapis"));
 app.use("/api", require("./routes/ossinsight"));
+app.use("/api", require("./routes/contacts"));
 
 app.use(function (err, req, res, next) {
   res.status(422).send({ error: err.message });
