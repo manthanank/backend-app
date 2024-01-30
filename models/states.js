@@ -3,7 +3,10 @@ const Schema = mongoose.Schema;
 
 // create State schema & model
 const StateSchema = new Schema({
-    stateName: {
+    code: {
+        type: String,
+    },
+    name: {
         type: String,
     }
 });
