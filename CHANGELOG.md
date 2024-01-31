@@ -1,3 +1,12 @@
+# [1.6.0](https://github.com/manthanank/backend-app/compare/v1.5.0...v1.6.0) (2024-01-30)
+
+
+### Features
+
+* updated ([9c89267](https://github.com/manthanank/backend-app/commit/9c89267f5d9556f6f4771ae317fbd7313b32539c))
+
+
+
 # [1.5.0](https://github.com/manthanank/backend-app/compare/v1.4.0...v1.5.0) (2024-01-30)
 
 
@@ -31,16 +40,6 @@
 ### Features
 
 * updated example env ([23a0d5a](https://github.com/manthanank/backend-app/commit/23a0d5a7da3d68aadfb9c96e0252cb5b9dd70a4f))
-
-
-
-# [1.1.0](https://github.com/manthanank/backend-app/compare/022d8400aa9ee6fc0aef38028b90ebef9a6881ac...v1.1.0) (2023-04-09)
-
-
-### Features
-
-* added portfolio apis, realses yml ([40cd668](https://github.com/manthanank/backend-app/commit/40cd668a6fdcda092643f359bdd3aca9402f4a8d))
-* updated ([022d840](https://github.com/manthanank/backend-app/commit/022d8400aa9ee6fc0aef38028b90ebef9a6881ac))
 
 
 
