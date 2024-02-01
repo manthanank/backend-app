@@ -1,3 +1,13 @@
+# [1.7.0](https://github.com/manthanank/backend-app/compare/v1.6.0...v1.7.0) (2024-01-31)
+
+
+### Features
+
+* updated ([e08507a](https://github.com/manthanank/backend-app/commit/e08507adb916d4d0131b9e496d41d1b020c1b377))
+* updated ([784f366](https://github.com/manthanank/backend-app/commit/784f366e9bf2c9606c47cccf1df4cfa3e68cc347))
+
+
+
 # [1.6.0](https://github.com/manthanank/backend-app/compare/v1.5.0...v1.6.0) (2024-01-30)
 
 
@@ -31,15 +41,6 @@
 ### Features
 
 * updated ([90a7218](https://github.com/manthanank/backend-app/commit/90a721849d9784e93d9cff7b433390fc1f9bebc2))
-
-
-
-# [1.2.0](https://github.com/manthanank/backend-app/compare/v1.1.0...v1.2.0) (2023-04-09)
-
-
-### Features
-
-* updated example env ([23a0d5a](https://github.com/manthanank/backend-app/commit/23a0d5a7da3d68aadfb9c96e0252cb5b9dd70a4f))
 
 
 
