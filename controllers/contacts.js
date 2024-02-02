@@ -1,4 +1,5 @@
 const Contact = require('../models/contacts.js');
+const ITEMS_PER_PAGE = 10; // Change this value based on your pagination needs
 
 exports.submitForm = async (req, res, next) => {
     // console.log(req.body);
@@ -40,14 +41,34 @@ exports.submitForm = async (req, res, next) => {
 
 //get all contacts
 exports.getContacts = (req, res, next) => {
-    Contact.find({})
-        .then((data) => {
-            res.status(200).json({ success: true, message: 'Contacts retrieved successfully', data: data });
-        })
-        .catch((error) => {
-            res.status(500).json({ success: false, message: 'Internal Server Error', error: error.message });
+    const page = parseInt(req.query.page) || 1;
+    const ITEMS_PER_PAGE = 10; // Set your desired items per page
+
+    // Use Promise.all to perform both queries concurrently
+    Promise.all([
+        Contact.find({}).countDocuments(), // Get the total count of contacts
+        Contact.find({})
+            .skip((page - 1) * ITEMS_PER_PAGE)
+            .limit(ITEMS_PER_PAGE) // Get contacts for the current page
+    ])
+    .then(([totalContacts, data]) => {
+        res.status(200).json({
+            success: true,
+            message: 'Contacts retrieved successfully',
+            data: data,
+            count: data.length,
+            totalContacts: totalContacts
         });
+    })
+    .catch((error) => {
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error',
+            error: error.message
+        });
+    });
 }
+
 
 //delete contacts
 exports.deleteContact = (req, res, next) => {
