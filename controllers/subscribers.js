@@ -34,3 +34,46 @@ exports.createSubscribers = async (req, res, next) => {
         next(error);
     }
 };
+
+exports.getSubscribers = async (req, res, next) => {
+    const page = parseInt(req.query.page) || 1;
+    const ITEMS_PER_PAGE = 10; // Set your desired items per page
+
+    // Use Promise.all to perform both queries concurrently
+    Promise.all([
+        Subscribers.find({}).countDocuments(), // Get the total count of subscribers
+        Subscribers.find({})
+            .skip((page - 1) * ITEMS_PER_PAGE)
+            .limit(ITEMS_PER_PAGE) // Get subscribers for the current page
+    ])
+    .then(([totalSubscribers, data]) => {
+        res.status(200).json({
+            success: true,
+            message: 'Subscribers retrieved successfully',
+            data: data,
+            count: data.length,
+            totalSubscribers: totalSubscribers
+        });
+    })
+    .catch((error) => {
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error',
+            error: error.message
+        });
+    });
+};
+
+exports.deleteSubscriber = (req, res, next) => {
+    Subscribers.findOneAndDelete({ _id: req.params.id })
+        .then((data) => {
+            if (!data) {
+                return res.status(404).json({ success: false, message: 'Subscriber not found' });
+            }
+
+            res.status(200).json({ success: true, message: 'Subscriber deleted successfully' });
+        })
+        .catch((error) => {
+            res.status(500).json({ success: false, message: 'Internal Server Error', error: error.message });
+        });
+}

@@ -9,16 +9,17 @@ require("dotenv").config();
 
 const dbUser = process.env.MONGODB_USER;
 const dbPassword = process.env.MONGODB_PASSWORD;
+const dbName = process.env.MONGODB_DBNAME || 'backend';
+
+const mongoURI = `mongodb+srv://${dbUser}:${dbPassword}@cluster0.re3ha3x.mongodb.net/${dbName}?retryWrites=true&w=majority`;
 
 mongoose
-  .connect(
-    `mongodb+srv://${dbUser}:${dbPassword}@cluster0.re3ha3x.mongodb.net/backend`
-  )
+  .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("Connected to MongoDB database!");
   })
-  .catch(() => {
-    console.log("Connection failed!");
+  .catch((error) => {
+    console.error("Connection failed:", error.message);
   });
 
 app.use(
@@ -30,14 +31,10 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 app.use(express.json());
 
-// portfolio blogs
+// routes
 app.use("/api", require("./routes/blogs"));
-// portfolio projects
 app.use("/api", require("./routes/projects"));
-// portfolio uses
 app.use("/api", require("./routes/uses.js"));
-
-
 app.use("/api", require("./routes/data"));
 app.use("/api", require("./routes/users"));
 app.use("/api", require("./routes/states"));
@@ -45,9 +42,11 @@ app.use("/api", require("./routes/districts"));
 app.use("/api", require("./routes/simpleapis"));
 app.use("/api", require("./routes/ossinsight"));
 app.use("/api", require("./routes/contacts"));
+app.use("/api", require("./routes/subscribers"));
 
-app.use(function (err, req, res, next) {
-  res.status(422).send({ error: err.message });
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something went wrong!');
 });
 
 app.get("/", async (req, res) => {

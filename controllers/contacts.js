@@ -1,5 +1,4 @@
 const Contact = require('../models/contacts.js');
-const ITEMS_PER_PAGE = 10; // Change this value based on your pagination needs
 
 exports.submitForm = async (req, res, next) => {
     // console.log(req.body);
