@@ -5,6 +5,8 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require('mongoose');
 
+const otpRoutes = require('./routes/otp');
+
 require("dotenv").config();
 
 const dbUser = process.env.MONGODB_USER;
@@ -43,6 +45,8 @@ app.use("/api", require("./routes/simpleapis"));
 app.use("/api", require("./routes/ossinsight"));
 app.use("/api", require("./routes/contacts"));
 app.use("/api", require("./routes/subscribers"));
+
+app.use('/api', otpRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
