@@ -6,7 +6,14 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const email = verifyOTPForm.elements.email.value;
             const otp = verifyOTPForm.elements.otp.value;
-            const response = await fetch(`/api/verifyOTP?email=${email}&otp=${otp}`);
+
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const apiEndpoint = isLocal
+                ? "http://localhost:3000/api"
+                : "https://backend-app-8ev9.onrender.com/api";
+
+            const response = await fetch(`${apiEndpoint}/verifyOTP?email=${email}&otp=${otp}`);
+            
             const result = await response.json();
             // console.log(result);
             alert(result.message);
