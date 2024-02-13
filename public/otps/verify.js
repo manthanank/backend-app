@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await response.json();
             // console.log(result);
             alert(result.message);
+            if (result.success) {
+                window.location.href = 'success.html';
+            }
         });
     }
 });
