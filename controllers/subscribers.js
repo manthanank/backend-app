@@ -35,6 +35,33 @@ exports.createSubscribers = async (req, res, next) => {
     }
 };
 
+exports.unsubscribe = async (req, res, next) => {
+    const email = req.body.email;
+
+    try {
+        // Check if the email exists in the database
+        const existingSubscriber = await Subscribers.findOne({ email });
+
+        if (!existingSubscriber) {
+            // Email doesn't exist, send a message
+            return res.send('Email not subscribed.');
+        }
+
+        // Email exists, delete from the database
+        const deletedSubscriber = await Subscribers.findOneAndDelete({ email });
+        // console.log('Subscription deleted from the database:', deletedSubscriber);
+
+        // For simplicity, let's just print it to the console
+        console.log(`Subscription deleted: ${email}`);
+
+        res.send('Unsubscribed successfully.');
+    } catch (error) {
+        // Handle database or other errors
+        console.error('Error unsubscribing:', error);
+        next(error);
+    }
+};
+
 exports.getSubscribers = async (req, res, next) => {
     const page = parseInt(req.query.page) || 1;
     const ITEMS_PER_PAGE = 10; // Set your desired items per page
