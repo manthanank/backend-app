@@ -16,7 +16,7 @@ exports.createSubscribers = async (req, res, next) => {
 
         // Email doesn't exist, save to the database
         const newSubscriber = new Subscribers({ email });
-        const savedSubscriber = await newSubscriber.save();
+        await newSubscriber.save();
         // console.log('Subscription saved to the database:', savedSubscriber);
 
         // For simplicity, let's just print it to the console
@@ -24,7 +24,9 @@ exports.createSubscribers = async (req, res, next) => {
 
         // Send a welcome newsletter
         const welcomeSubject = 'Welcome to Our Newsletter!';
-        const welcomeContent = '<p>Thank you for subscribing to our newsletter!</p>';
+        let welcomeContent = '<p>Thank you for subscribing to our newsletter!</p>';
+        // add unsubscribe link
+        welcomeContent += `<p><a href="${process.env.CLIENT_URL}/unsubscribe?email=${email}">Unsubscribe</a></p>`;
         sendNewsletter(email, welcomeSubject, welcomeContent);
 
         res.send('Subscription successful! Check your email for a welcome newsletter.');
