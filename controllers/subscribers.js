@@ -26,7 +26,11 @@ exports.createSubscribers = async (req, res, next) => {
         const welcomeSubject = 'Welcome to Our Newsletter!';
         let welcomeContent = '<p>Thank you for subscribing to our newsletter!</p>';
         // add unsubscribe link
-        welcomeContent += `<p><a href="${process.env.CLIENT_URL}/unsubscribe?email=${email}">Unsubscribe</a></p>`;
+        const apiEndpoint = req.get('host') === 'localhost:3000'
+            ? "http://localhost:3000"
+            : "https://backend-app-8ev9.onrender.com";
+
+        welcomeContent += `<p><a href="${apiEndpoint}/unsubscribe?email=${email}">Unsubscribe</a></p>`;
         sendNewsletter(email, welcomeSubject, welcomeContent);
 
         res.send('Subscription successful! Check your email for a welcome newsletter.');
