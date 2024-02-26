@@ -4,7 +4,7 @@ document.getElementById("unsubscribe").addEventListener("click", function () {
     const email = urlParams.get('email');
     // console.log(email);
 
-    // unsubscribe the email http://localhost:3000/api/unsubscribe POST method
+    // Send a POST request to the server
     fetch('http://localhost:3000/api/unsubscribe', {
         method: 'POST',
         headers: {
