@@ -6,6 +6,10 @@ const ObjectId = require('mongoose').Types.ObjectId;
 const controller = require('../controllers/users');
 
 router.get('/users', controller.getUsers);
+router.get('/users/:id', controller.getUserById);
+router.post('/users', controller.postUser);
+router.put('/users/:id', controller.putUser);
+router.delete('/users/:id', controller.deleteUser);
 
 // get users request
 // router.get('/users',(req,res,next) => {
@@ -32,21 +36,21 @@ router.get('/users', controller.getUsers);
 //     });
 // });
 
-router.get('/users/:id', (req, res) => {
-    if (ObjectId.isValid(req.params.id)) {
-        Users.findById(req.params.id, (err, doc) =>{
-            if (err) {
-                console.log('Error While Getting by id' + err);
-            }
-            else {
-                res.send(doc);
-            }
-        })
-    }
-    else {
-        return res.status(400).send('No Users found with id ' + req.params.id);
-    }
-});
+// router.get('/users/:id', (req, res) => {
+//     if (ObjectId.isValid(req.params.id)) {
+//         Users.findById(req.params.id, (err, doc) =>{
+//             if (err) {
+//                 console.log('Error While Getting by id' + err);
+//             }
+//             else {
+//                 res.send(doc);
+//             }
+//         })
+//     }
+//     else {
+//         return res.status(400).send('No Users found with id ' + req.params.id);
+//     }
+// });
 
 // post users request
 // router.post('/users',(req,res,next) => {
@@ -70,19 +74,19 @@ router.get('/users/:id', (req, res) => {
 //     });
 // });
 
-router.post('/users', async (req, res) => {
-    try {
-        let users = new Users({
-            name: req.body.name,
-            age: req.body.age
-        });
-        const doc = await users.save();
-        res.send(doc);
-    } catch (err) {
-        console.log('Error While Posting', err);
-        res.status(500).send('Internal Server Error');
-    }
-});
+// router.post('/users', async (req, res) => {
+//     try {
+//         let users = new Users({
+//             name: req.body.name,
+//             age: req.body.age
+//         });
+//         const doc = await users.save();
+//         res.send(doc);
+//     } catch (err) {
+//         console.log('Error While Posting', err);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });
 
 // update users by id request
 // router.put('/users/:id', (req, res, next) => {
@@ -114,28 +118,28 @@ router.post('/users', async (req, res) => {
 //     }
 // });
 
-router.put('/users/:id', async (req, res) => {
-    try {
-        if (ObjectId.isValid(req.params.id)) {
-            let users = {
-                name: req.body.name,
-                age: req.body.age
-            }
+// router.put('/users/:id', async (req, res) => {
+//     try {
+//         if (ObjectId.isValid(req.params.id)) {
+//             let users = {
+//                 name: req.body.name,
+//                 age: req.body.age
+//             }
 
-            const doc = await Users.findByIdAndUpdate(req.params.id, {$set: users}, {new: true});
-            if (doc) {
-                res.send(doc);
-            } else {
-                res.status(404).send('No Users found with id ' + req.params.id);
-            }
-        } else {
-            res.status(400).send('Invalid id format');
-        }
-    } catch (err) {
-        console.log('Error While Updating by id', err);
-        res.status(500).send('Internal Server Error');
-    }
-});
+//             const doc = await Users.findByIdAndUpdate(req.params.id, {$set: users}, {new: true});
+//             if (doc) {
+//                 res.send(doc);
+//             } else {
+//                 res.status(404).send('No Users found with id ' + req.params.id);
+//             }
+//         } else {
+//             res.status(400).send('Invalid id format');
+//         }
+//     } catch (err) {
+//         console.log('Error While Updating by id', err);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });
 
 // delete users by id request
 // router.delete('/users/:id', (req, res, next) => {
@@ -160,22 +164,22 @@ router.put('/users/:id', async (req, res) => {
 //     }
 // });
 
-router.delete('/users/:id', async (req, res) => {
-    try {
-        if (ObjectId.isValid(req.params.id)) {
-            const doc = await Users.findByIdAndDelete(req.params.id);
-            if (doc) {
-                res.send(doc);
-            } else {
-                res.status(404).send('No Users found with id ' + req.params.id);
-            }
-        } else {
-            res.status(400).send('Invalid id format');
-        }
-    } catch (err) {
-        console.log('Error While Deleting by id', err);
-        res.status(500).send('Internal Server Error');
-    }
-});
+// router.delete('/users/:id', async (req, res) => {
+//     try {
+//         if (ObjectId.isValid(req.params.id)) {
+//             const doc = await Users.findByIdAndDelete(req.params.id);
+//             if (doc) {
+//                 res.send(doc);
+//             } else {
+//                 res.status(404).send('No Users found with id ' + req.params.id);
+//             }
+//         } else {
+//             res.status(400).send('Invalid id format');
+//         }
+//     } catch (err) {
+//         console.log('Error While Deleting by id', err);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });
 
 module.exports = router;
