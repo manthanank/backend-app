@@ -45,6 +45,7 @@ app.use("/api", require("./routes/simpleapis"));
 app.use("/api", require("./routes/ossinsight"));
 app.use("/api", require("./routes/contacts"));
 app.use("/api", require("./routes/subscribers"));
+app.use("/api", require("./routes/posts"));
 
 app.use('/api', otpRoutes);
 
