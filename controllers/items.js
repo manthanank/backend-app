@@ -24,7 +24,8 @@ exports.getItems = async (req, res) => {
 // Update item
 exports.updateItem = async (req, res) => {
   try {
-    const updatedItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const item = await Item.findOne({ id: req.params.id });
+    const updatedItem = await Item.findByIdAndUpdate(item._id, req.body , { new: true });
     res.json(updatedItem);
   } catch (err) {
     res.status(400).json({ message: err.message });
