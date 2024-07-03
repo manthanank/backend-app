@@ -49,6 +49,7 @@ app.use("/api", require("./routes/subscribers"));
 app.use("/api", require("./routes/posts"));
 app.use("/api", require("./routes/items"));
 app.use("/api", require("./routes/books"));
+app.use("/api", require("./routes/logs"));
 
 app.use('/api', otpRoutes);
 
