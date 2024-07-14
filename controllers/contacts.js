@@ -38,6 +38,21 @@ exports.submitForm = async (req, res, next) => {
     }
 }
 
+//get a single contact
+exports.getContact = (req, res, next) => {
+    Contact.findOne({ _id: req.params.id })
+        .then((data) => {
+            if (!data) {
+                return res.status(404).json({ success: false, message: 'Contact not found' });
+            }
+
+            res.status(200).json({ success: true, message: 'Contact retrieved successfully', data: data });
+        })
+        .catch((error) => {
+            res.status(500).json({ success: false, message: 'Internal Server Error', error: error.message });
+        });
+};
+
 //get all contacts
 exports.getContacts = (req, res, next) => {
     const page = parseInt(req.query.page) || 1;

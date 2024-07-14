@@ -50,7 +50,7 @@ app.use("/api", require("./routes/posts"));
 app.use("/api", require("./routes/items"));
 app.use("/api", require("./routes/books"));
 app.use("/api", require("./routes/logs"));
-
+app.use('/api', require('./routes/notes'));
 app.use('/api', otpRoutes);
 
 app.use((err, req, res, next) => {
