@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
             const apiEndpoint = isLocal
                 ? "http://localhost:3000/api/subscribers"
-                : "https://backend-app-8ev9.onrender.com/api/subscribers";
+                : "https://backend-app-manthanank.vercel.app/api/subscribers";
 
             const response = await fetch(`${apiEndpoint}?page=${page}&pageSize=${pageSize}`);
 
@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
             const apiEndpoint = isLocal
                 ? "http://localhost:3000/api/subscribers"
-                : "https://backend-app-8ev9.onrender.com/api/subscribers";
+                : "https://backend-app-manthanank.vercel.app/api/subscribers";
 
             const response = await fetch(`${apiEndpoint}?page=${currentPage + 1}&pageSize=${pageSize}`);
 
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
             const apiEndpoint = isLocal
                 ? "http://localhost:3000/api/subscribers"
-                : "https://backend-app-8ev9.onrender.com/api/subscribers";
+                : "https://backend-app-manthanank.vercel.app/api/subscribers";
 
             const response = await fetch(`${apiEndpoint}/${subscriberId}`, {
                 method: 'DELETE'

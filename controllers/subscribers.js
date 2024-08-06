@@ -28,7 +28,7 @@ exports.createSubscribers = async (req, res, next) => {
         // add unsubscribe link
         const apiEndpoint = req.get('host') === 'localhost:3000'
             ? "http://localhost:3000"
-            : "https://backend-app-8ev9.onrender.com";
+            : "https://backend-app-manthanank.vercel.app/";
 
         welcomeContent += `<p><a href="${apiEndpoint}/unsubscribe?email=${email}">Unsubscribe</a></p>`;
         sendNewsletter(email, welcomeSubject, welcomeContent);
