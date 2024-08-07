@@ -23,8 +23,9 @@ exports.getUserById = async (req, res, next) => {
 
 //post user
 exports.postUser = async (req, res, next) => {
+    const { name, age } = req.body;
     try {
-        const data = await Users.create(req.body);
+        const data = await Users.create({ name, age });
         res.send(data);
     }
     catch (error) {
