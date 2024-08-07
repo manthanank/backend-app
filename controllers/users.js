@@ -35,8 +35,9 @@ exports.postUser = async (req, res, next) => {
 
 //put user
 exports.putUser = async (req, res, next) => {
+    const { name, age } = req.body;
     try {
-        const data = await Users.findByIdAndUpdate({ _id: req.params.id }, req.body);
+        const data = await Users.findByIdAndUpdate({ _id: req.params.id }, { name, age });
         res.send(data);
     }
     catch (error) {
