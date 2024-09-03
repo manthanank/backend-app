@@ -1,15 +1,24 @@
 {
   "name": "backend-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is a backend application",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
     "start": "node --watch index.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "backend",
+    "node",
+    "express",
+    "mongoose",
+    "notion",
+    "axios",
+    "nodemailer",
+    "multer"
+  ],
+  "author": "Manthan Ankolekar",
   "license": "ISC",
   "dependencies": {
     "@notionhq/client": "^2.2.15",
