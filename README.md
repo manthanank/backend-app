@@ -47,6 +47,7 @@ npm start
 - [bcrypt](https://www.npmjs.com/package/bcrypt): A library to help you hash passwords.
 - [winston](https://www.npmjs.com/package/winston): A logger for just about everything.
 - [moment](https://www.npmjs.com/package/moment): Parse, validate, manipulate, and display dates and times in JavaScript.
+- [lodash](https://www.npmjs.com/package/lodash): A modern JavaScript utility library delivering modularity, performance & extras.
 
 ## Development Dependencies
 
