@@ -43,6 +43,10 @@ npm start
 - [helmet](https://www.npmjs.com/package/helmet): Secure Express apps by setting various HTTP headers to protect against well-known web vulnerabilities.
 - [@notionhq/client](https://www.npmjs.com/package/@notionhq/client): Official Notion API client for Node.js.
 - [randomstring](https://www.npmjs.com/package/randomstring): Generate random strings.
+- [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken): An implementation of JSON Web Tokens.
+- [bcrypt](https://www.npmjs.com/package/bcrypt): A library to help you hash passwords.
+- [winston](https://www.npmjs.com/package/winston): A logger for just about everything.
+- [moment](https://www.npmjs.com/package/moment): Parse, validate, manipulate, and display dates and times in JavaScript.
 
 ## Development Dependencies
 

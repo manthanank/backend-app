@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const path = require("path");
 const helmet = require("helmet"); // Import helmet
+const logger = require("./logger"); // Import logger
 
 const otpRoutes = require("./routes/otp");
 
@@ -20,10 +21,10 @@ const mongoURI = `mongodb+srv://${dbUser}:${dbPassword}@cluster0.re3ha3x.mongodb
 mongoose
   .connect(mongoURI)
   .then(() => {
-    console.log("Connected to MongoDB database!");
+    logger.info("Connected to MongoDB database!");
   })
   .catch((error) => {
-    console.error("Connection failed:", error.message);
+    logger.error("Connection failed:", error.message);
   });
 
 app.use(helmet()); // Use helmet middleware
@@ -56,7 +57,7 @@ app.use("/api", require("./routes/notes"));
 app.use("/api", otpRoutes);
 
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  logger.error(err.stack);
   res.status(500).send("Something went wrong!");
 });
 
@@ -65,5 +66,5 @@ app.get("/", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+  logger.info(`Server started on port ${PORT}`);
 });
