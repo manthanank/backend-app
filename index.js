@@ -3,21 +3,22 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const mongoose = require('mongoose');
-const path = require('path');
+const mongoose = require("mongoose");
+const path = require("path");
+const helmet = require("helmet"); // Import helmet
 
-const otpRoutes = require('./routes/otp');
+const otpRoutes = require("./routes/otp");
 
 require("dotenv").config();
 
 const dbUser = process.env.MONGODB_USER;
 const dbPassword = process.env.MONGODB_PASSWORD;
-const dbName = process.env.MONGODB_DBNAME || 'backend';
+const dbName = process.env.MONGODB_DBNAME || "backend";
 
 const mongoURI = `mongodb+srv://${dbUser}:${dbPassword}@cluster0.re3ha3x.mongodb.net/${dbName}?retryWrites=true&w=majority`;
 
 mongoose
-  .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(mongoURI)
   .then(() => {
     console.log("Connected to MongoDB database!");
   })
@@ -25,6 +26,7 @@ mongoose
     console.error("Connection failed:", error.message);
   });
 
+app.use(helmet()); // Use helmet middleware
 app.use(
   cors({
     origin: "*",
@@ -50,12 +52,12 @@ app.use("/api", require("./routes/posts"));
 app.use("/api", require("./routes/items"));
 app.use("/api", require("./routes/books"));
 app.use("/api", require("./routes/logs"));
-app.use('/api', require('./routes/notes'));
-app.use('/api', otpRoutes);
+app.use("/api", require("./routes/notes"));
+app.use("/api", otpRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send('Something went wrong!');
+  res.status(500).send("Something went wrong!");
 });
 
 app.get("/", async (req, res) => {
