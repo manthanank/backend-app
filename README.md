@@ -40,6 +40,9 @@ npm start
 - [mongoose](https://www.npmjs.com/package/mongoose): MongoDB object modeling tool designed to work in an asynchronous environment
 - [multer](https://www.npmjs.com/package/multer): Middleware for handling `multipart/form-data`, used for file uploads
 - [nodemailer](https://www.npmjs.com/package/nodemailer): Send emails with Node.js
+- [helmet](https://www.npmjs.com/package/helmet): Secure Express apps by setting various HTTP headers to protect against well-known web vulnerabilities.
+- [@notionhq/client](https://www.npmjs.com/package/@notionhq/client): Official Notion API client for Node.js.
+- [randomstring](https://www.npmjs.com/package/randomstring): Generate random strings.
 
 ## Development Dependencies
 
