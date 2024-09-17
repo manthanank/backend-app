@@ -19,7 +19,7 @@
     "multer"
   ],
   "author": "Manthan Ankolekar",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@notionhq/client": "^2.2.15",
     "axios": "^1.7.2",
