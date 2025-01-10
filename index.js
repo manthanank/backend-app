@@ -47,6 +47,9 @@ app.use("/api", require("./routes/logs"));
 app.use("/api", require("./routes/notes"));
 app.use("/api", otpRoutes);
 
+// Swagger setup
+require('./swagger')(app);
+
 // Error handling
 app.use((err, req, res, next) => {
   logger.error(err.stack);

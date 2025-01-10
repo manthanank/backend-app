@@ -1,6 +1,6 @@
 const Otps = require('../models/otp.js');
 const randomstring = require('randomstring');
-const sendEmail = require('../utils/sendEmails');
+const sendEmail = require('../utils/sendEmails.js');
 
 // Generate OTP
 function generateOTP() {

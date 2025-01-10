@@ -2,8 +2,8 @@ const District = require("../models/districts");
 
 exports.getDistricts = (req, res, next) => {
   District.find({})
-    .then((district) => {
-      res.send(district);
+    .then((districts) => {
+      res.send(districts);
     })
     .catch(next);
 };
