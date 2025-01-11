@@ -10,11 +10,21 @@ const options = {
       description: 'API documentation for the Backend App',
     },
   },
-  apis: ['./routes/*.js', './controllers/*.js'], // Paths to files containing OpenAPI definitions
+  apis: ['./routes/*.js', './controllers/*.js', './models/*.js'],
 };
 
 const specs = swaggerJsdoc(options);
 
+const swaggerOptions = {
+  customSiteTitle: 'Backend App API Documentation',
+  swaggerOptions: {
+    docExpansion: 'none',
+    defaultModelsExpandDepth: -1,
+    defaultModelExpandDepth: 0,
+    showRequestHeaders: false,
+  },
+};
+
 module.exports = (app) => {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, swaggerOptions));
 };
