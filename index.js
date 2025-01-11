@@ -1,25 +1,18 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
 const path = require("path");
 const helmet = require("helmet");
 const logger = require("./logger");
 const otpRoutes = require("./routes/otp");
+const connectDB = require('./config/db');
 require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Database connection
-const dbUser = process.env.MONGODB_USER;
-const dbPassword = process.env.MONGODB_PASSWORD;
-const dbName = process.env.MONGODB_DBNAME || "backend";
-const mongoURI = `mongodb+srv://${dbUser}:${dbPassword}@cluster0.re3ha3x.mongodb.net/${dbName}?retryWrites=true&w=majority`;
-
-mongoose.connect(mongoURI)
-  .then(() => logger.info("Connected to MongoDB database!"))
-  .catch((error) => logger.error("Connection failed:", error.message));
+connectDB();
 
 // Middleware
 app.use(helmet());
