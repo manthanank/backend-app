@@ -16,24 +16,6 @@
       "dest": "index.js"
     },
     {
-      "src": "/api-docs",
-      "dest": "index.js"
-    },
-    {
-      "src": "/api-docs/(.*\\.css)",
-      "headers": { "content-type": "text/css" },
-      "dest": "index.js"
-    },
-    {
-      "src": "/api-docs/(.*\\.js)",
-      "headers": { "content-type": "application/javascript" },
-      "dest": "index.js" 
-    },
-    {
-      "src": "/api-docs/(.*)",
-      "dest": "index.js"
-    },
-    {
       "src": "/(.*)",
       "dest": "/public/$1"
     }
