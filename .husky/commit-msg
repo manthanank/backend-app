@@ -1,0 +1,17 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Check if commit message is empty
+if [ -z "$1" ]; then
+    echo "Aborting commit. Your commit message is empty."
+    exit 1
+fi
+
+# Check if commit message follows a specific pattern (e.g., JIRA ticket number)
+if ! grep -qE "^[A-Z]+-[0-9]+: .+" "$1"; then
+    echo "Aborting commit. Your commit message does not follow the required pattern: JIRA-TICKET: message"
+    exit 1
+fi
+
+# If everything is fine, allow the commit
+exit 0

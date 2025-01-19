@@ -1,0 +1,10 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run tests before pushing code
+npm test
+
+# Check for linting errors
+npm run lint
+
+# If both commands pass, allow the push to proceed
