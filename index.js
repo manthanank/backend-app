@@ -9,7 +9,6 @@ const connectDB = require('./config/db');
 const morgan = require('morgan');
 const rateLimit = require("express-rate-limit");
 const compression = require("compression");
-const csrf = require("csurf");
 require("dotenv").config();
 
 const app = express();
@@ -26,7 +25,6 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(morgan('combined'));
 app.use(compression());
-app.use(csrf());
 
 // Rate Limiting
 const limiter = rateLimit({
@@ -34,12 +32,6 @@ const limiter = rateLimit({
   max: 100 // limit each IP to 100 requests per windowMs
 });
 app.use(limiter);
-
-// Middleware to set CSRF token in response locals
-app.use((req, res, next) => {
-  res.locals.csrfToken = req.csrfToken();
-  next();
-});
 
 // Routes
 app.use("/api", require("./routes/blogs"));
