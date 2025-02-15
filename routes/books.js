@@ -13,7 +13,46 @@ const bookController = new BookController();
 
 /**
  * @swagger
- * /api/books:
+ * components:
+ *   schemas:
+ *     Book:
+ *       type: object
+ *       required:
+ *         - title
+ *         - author
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: The auto-generated id of the book
+ *         title:
+ *           type: string
+ *           description: The title of the book
+ *         author:
+ *           type: string
+ *           description: The author of the book
+ *     Response:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *           description: Indicates if the operation was successful
+ *         data:
+ *           type: object
+ *           description: The response data
+ *     Error:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *           description: Always false for errors
+ *         error:
+ *           type: string
+ *           description: Error message
+ */
+
+/**
+ * @swagger
+ * /books:
  *   post:
  *     summary: Create a new book
  *     tags: [Books]
@@ -22,25 +61,37 @@ const bookController = new BookController();
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               author:
- *                 type: string
+ *             $ref: '#/components/schemas/Book'
  *     responses:
  *       201:
- *         description: The created book
+ *         description: The book was successfully created
  *         content:
  *           application/json:
  *             schema:
- *               type: object
+ *               allOf:
+ *                 - $ref: '#/components/schemas/Response'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       $ref: '#/components/schemas/Book'
+ *       400:
+ *         description: Missing required fields
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 router.post('/books', (req, res) => bookController.create(req, res));
 
 /**
  * @swagger
- * /api/books/{id}:
+ * /books/{id}:
  *   get:
  *     summary: Get book by ID
  *     tags: [Books]
@@ -53,19 +104,34 @@ router.post('/books', (req, res) => bookController.create(req, res));
  *         description: The book ID
  *     responses:
  *       200:
- *         description: A book object
+ *         description: Book details
  *         content:
  *           application/json:
  *             schema:
- *               type: object
+ *               allOf:
+ *                 - $ref: '#/components/schemas/Response'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       $ref: '#/components/schemas/Book'
  *       404:
  *         description: Book not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 router.get('/books/:id', (req, res) => bookController.read(req, res));
 
 /**
  * @swagger
- * /api/books/{id}:
+ * /books/{id}:
  *   put:
  *     summary: Update a book
  *     tags: [Books]
@@ -81,27 +147,32 @@ router.get('/books/:id', (req, res) => bookController.read(req, res));
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               author:
- *                 type: string
+ *             $ref: '#/components/schemas/Book'
  *     responses:
  *       200:
  *         description: The updated book
  *         content:
  *           application/json:
  *             schema:
- *               type: object
+ *               $ref: '#/components/schemas/Book'
  *       404:
  *         description: Book not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 router.put('/books/:id', (req, res) => bookController.update(req, res));
 
 /**
  * @swagger
- * /api/books/{id}:
+ * /books/{id}:
  *   delete:
  *     summary: Delete a book
  *     tags: [Books]
@@ -114,19 +185,40 @@ router.put('/books/:id', (req, res) => bookController.update(req, res));
  *         description: The book ID
  *     responses:
  *       200:
- *         description: The deleted book
+ *         description: Book deleted successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
+ *               allOf:
+ *                 - $ref: '#/components/schemas/Response'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       type: object
+ *                       properties:
+ *                         message:
+ *                           type: string
+ *                           example: Book deleted successfully
+ *                         book:
+ *                           $ref: '#/components/schemas/Book'
  *       404:
  *         description: Book not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 router.delete('/books/:id', (req, res) => bookController.delete(req, res));
 
 /**
  * @swagger
- * /api/books:
+ * /books:
  *   get:
  *     summary: Get all books
  *     tags: [Books]
@@ -138,7 +230,13 @@ router.delete('/books/:id', (req, res) => bookController.delete(req, res));
  *             schema:
  *               type: array
  *               items:
- *                 type: object
+ *                 $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 router.get('/books', (req, res) => bookController.getAll(req, res));
 

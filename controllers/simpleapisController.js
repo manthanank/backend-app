@@ -1,43 +1,43 @@
-const axios = require("axios");
+const axios = require('axios');
 
 const getCoffeeHot = (req, res) => {
   axios
-    .get("https://api.sampleapis.com/coffee/hot")
+    .get('https://api.sampleapis.com/coffee/hot')
     .then((response) => res.send(response.data))
     .catch((error) => res.send(error));
 };
 
 const getBeersAle = (req, res) => {
   axios
-    .get("https://api.sampleapis.com/beers/ale")
+    .get('https://api.sampleapis.com/beers/ale')
     .then((response) => res.send(response.data))
     .catch((error) => res.send(error));
 };
 
 const getSwitchGames = (req, res) => {
   axios
-    .get("https://api.sampleapis.com/switch/games")
+    .get('https://api.sampleapis.com/switch/games')
     .then((response) => res.send(response.data))
     .catch((error) => res.send(error));
 };
 
 const getWinesReds = (req, res) => {
   axios
-    .get("https://api.sampleapis.com/wines/reds")
+    .get('https://api.sampleapis.com/wines/reds')
     .then((response) => res.send(response.data))
     .catch((error) => res.send(error));
 };
 
 const getFuturamaInfo = (req, res) => {
   axios
-    .get("https://api.sampleapis.com/futurama/info")
+    .get('https://api.sampleapis.com/futurama/info')
     .then((response) => res.send(response.data))
     .catch((error) => res.send(error));
 };
 
 const getCodingResources = (req, res) => {
   axios
-    .get("https://api.sampleapis.com/codingresources/codingResources")
+    .get('https://api.sampleapis.com/codingresources/codingResources')
     .then((response) => res.send(response.data))
     .catch((error) => res.send(error));
 };

@@ -11,7 +11,43 @@ const itemController = require('../controllers/itemsController');
 
 /**
  * @swagger
- * /api/items:
+ * components:
+ *   schemas:
+ *     Item:
+ *       type: object
+ *       required:
+ *         - name
+ *         - price
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: The name of the item
+ *           example: "Sample Item"
+ *         description:
+ *           type: string
+ *           description: The description of the item
+ *           example: "This is a sample item"
+ *         price:
+ *           type: number
+ *           description: The price of the item
+ *           example: 19.99
+ *         quantity:
+ *           type: number
+ *           description: The quantity of the item
+ *           example: 10
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: The creation date of the item
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           description: The last update date of the item
+ */
+
+/**
+ * @swagger
+ * /items:
  *   post:
  *     summary: Create a new item
  *     tags: [Items]
@@ -20,20 +56,29 @@ const itemController = require('../controllers/itemsController');
  *       content:
  *         application/json:
  *           schema:
- *             type: object
+ *             $ref: '#/components/schemas/Item'
  *     responses:
  *       201:
  *         description: The created item
  *         content:
  *           application/json:
  *             schema:
+ *               $ref: '#/components/schemas/Item'
+ *       400:
+ *         description: Invalid request
+ *         content:
+ *           application/json:
+ *             schema:
  *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 router.post('/items', itemController.createItem);
 
 /**
  * @swagger
- * /api/items:
+ * /items:
  *   get:
  *     summary: Get all items
  *     tags: [Items]
@@ -45,13 +90,22 @@ router.post('/items', itemController.createItem);
  *             schema:
  *               type: array
  *               items:
- *                 type: object
+ *                 $ref: '#/components/schemas/Item'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 router.get('/items', itemController.getItems);
 
 /**
  * @swagger
- * /api/items/{id}:
+ * /items/{id}:
  *   put:
  *     summary: Update an item
  *     tags: [Items]
@@ -67,20 +121,29 @@ router.get('/items', itemController.getItems);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
+ *             $ref: '#/components/schemas/Item'
  *     responses:
  *       200:
  *         description: The updated item
  *         content:
  *           application/json:
  *             schema:
+ *               $ref: '#/components/schemas/Item'
+ *       400:
+ *         description: Invalid request
+ *         content:
+ *           application/json:
+ *             schema:
  *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 router.put('/items/:id', itemController.updateItem);
 
 /**
  * @swagger
- * /api/items/{id}:
+ * /items/{id}:
  *   delete:
  *     summary: Delete an item
  *     tags: [Items]
@@ -93,11 +156,24 @@ router.put('/items/:id', itemController.updateItem);
  *         description: The item ID
  *     responses:
  *       200:
- *         description: The deleted item
+ *         description: Success message
  *         content:
  *           application/json:
  *             schema:
  *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Item deleted"
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 router.delete('/items/:id', itemController.deleteItem);
 

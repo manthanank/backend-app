@@ -1,5 +1,6 @@
 const { createLogger, format, transports } = require('winston');
 const { combine, timestamp, printf, json, colorize } = format;
+const winstonMongoDB = require('winston-mongodb');
 
 // Define custom log levels
 const customLevels = {
@@ -10,7 +11,7 @@ const customLevels = {
     http: 3,
     verbose: 4,
     debug: 5,
-    silly: 6
+    silly: 6,
   },
   colors: {
     error: 'red',
@@ -19,8 +20,8 @@ const customLevels = {
     http: 'magenta',
     verbose: 'cyan',
     debug: 'blue',
-    silly: 'gray'
-  }
+    silly: 'gray',
+  },
 };
 
 // Define custom log format
@@ -31,20 +32,26 @@ const logFormat = printf(({ level, message, timestamp }) => {
 // Create the logger
 const logger = createLogger({
   levels: customLevels.levels,
-  format: combine(
-    timestamp(),
-    logFormat
-  ),
+  format: combine(timestamp(), logFormat),
   transports: [
     new transports.Console({
-      format: combine(
-        colorize(),
-        logFormat
-      )
+      format: combine(colorize(), logFormat),
     }),
-    new transports.File({ filename: 'app.log', format: json() })
-  ]
+  ],
 });
+
+// Add file transport for local development
+if (process.env.NODE_ENV !== 'production') {
+  logger.add(new transports.File({ filename: 'app.log', format: json() }));
+} else {
+  // Add MongoDB transport for production
+  logger.add(new winstonMongoDB.MongoDB({
+    db: process.env.MONGODB_URI,
+    collection: 'logs',
+    format: json(),
+    level: 'info',
+  }));
+}
 
 // Add colors to the custom levels
 require('winston').addColors(customLevels.colors);

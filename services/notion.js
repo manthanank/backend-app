@@ -1,31 +1,31 @@
-const dotenv = require('dotenv').config()
-const { Client } = require('@notionhq/client')
+require('dotenv').config();
+const { Client } = require('@notionhq/client');
 
 // Init client
 const notion = new Client({
   auth: process.env.NOTION_TOKEN,
-})
+});
 
-const database_id = process.env.NOTION_DATABASE_ID
+const database_id = process.env.NOTION_DATABASE_ID;
 
 module.exports = {
   getNotes: async function () {
     const payload = {
       path: `databases/${database_id}/query`,
       method: 'POST',
-    }
+    };
 
-    const { results } = await notion.request(payload)
+    const { results } = await notion.request(payload);
 
     const notes = results.map((page) => {
       return {
         id: page.id,
         note: page.properties.Note.title[0].text.content,
         date: page.properties.Date.date.start,
-      }
-    })
+      };
+    });
 
-    return notes
+    return notes;
   },
   createNote: async function (note) {
     const currentDate = new Date().toISOString();
@@ -48,7 +48,7 @@ module.exports = {
             date: {
               start: currentDate,
             },
-          }
+          },
         },
       },
     };
@@ -64,7 +64,7 @@ module.exports = {
       throw error;
     }
   },
-  getNote: async function(id) {
+  getNote: async function (id) {
     try {
       const response = await notion.pages.retrieve({ page_id: id });
       const note = {
@@ -78,7 +78,7 @@ module.exports = {
       throw error;
     }
   },
-  updateNote: async function (note) {
+  updateNote: async function (id, note) {
     const currentDate = new Date().toISOString();
     try {
       const response = await notion.pages.update({
@@ -97,13 +97,13 @@ module.exports = {
             date: {
               start: currentDate,
             },
-          }
+          },
         },
       });
       return response;
     } catch (error) {
       console.error(`Failed to update note with ID ${id}: ${error}`);
-      throw error; // Rethrow the error for further handling if necessary
+      throw error;
     }
   },
   deleteNote: async function (id) {
@@ -115,7 +115,7 @@ module.exports = {
       return response;
     } catch (error) {
       console.error(`Failed to delete note with ID ${id}: ${error}`);
-      throw error; // Rethrow the error for further handling if necessary
+      throw error;
     }
   },
 };

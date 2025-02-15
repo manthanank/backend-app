@@ -1,90 +1,90 @@
 [
-    {
-        "laptop": "HP 15s 11th Gen",
-        "desktop": "BenQ GW2485TC 24 inch (60 cm)",
-        "keyboard": "Dell Km117 Wireless Keyboard",
-        "mouse": "Dell Km117 Wireless Mouse",
-        "mobile": "Realme 6 Pro",
-        "tablet": "Realme Pad 2",
-        "smartwatch": "Realme Watch 3",
-        "watch": "Fastrack",
-        "earbuds": "Boat Airdopes 161",
-        "headphones": [
-            "Boat Rockerz 450",
-            "Sony WH-CH520"
-        ],
-        "neckband": "Realme Bud 2",
-        "smartbulb": "Realme LED Wi-Fi Smart Bulb",
-        "framework": "Angular",
-        "editor": "VS Code",
-        "os": "Windows 11",
-        "browser": [
-            "Microsoft Edge",
-            "Google Chrome",
-            "Mozilla Firefox",
-            "Opera",
-            "Brave"
-        ],
-        "searchengine": "Google",
-        "mail": "Gmail",
-        "cloud": "Google Drive",
-        "notes": [
-            "Google Keep",
-            "Notion"
-        ],
-        "database": [
-            "Firebase",
-            "MongoDB",
-            "MySQL"
-        ],
-        "hosting": [
-            "Firebase",
-            "Netlify",
-            "Vercel"
-        ],
-        "frontend": [
-            "HTML",
-            "CSS",
-            "JavaScript",
-            "TypeScript",
-            "Angular",
-            "Astro",
-            "Gatsby",
-            "Next.js"
-        ],
-        "backend": [
-            "Node",
-            "Express"
-        ],
-        "api": [
-            "REST",
-            "GraphQL"
-        ],
-        "vcs": "Git",
-        "ci": "GitHub Actions",
-        "design": "Figma",
-        "video": "VLC Media Player",
-        "audio": "VLC Media Player",
-        "social": [
-            "Twitter",
-            "LinkedIn",
-            "Instagram",
-            "Facebook"
-        ],
-        "ecommerce": [
-            "Amazon",
-            "Flipkart"
-        ],
-        "food": [
-            "Swiggy",
-            "Zomato"
-        ],
-        "travel": [
-            "Uber",
-            "Ola"
-        ],
-        "bank": [
-            "SBI"
-        ]
-    }
+  {
+    "laptop": "HP 15s 11th Gen",
+    "desktop": "BenQ GW2485TC 24 inch (60 cm)",
+    "keyboard": "Dell Km117 Wireless Keyboard",
+    "mouse": "Dell Km117 Wireless Mouse",
+    "mobile": "Realme 6 Pro",
+    "tablet": "Realme Pad 2",
+    "smartwatch": "Realme Watch 3",
+    "watch": "Fastrack",
+    "earbuds": "Boat Airdopes 161",
+    "headphones": [
+      "Boat Rockerz 450",
+      "Sony WH-CH520"
+    ],
+    "neckband": "Realme Bud 2",
+    "smartbulb": "Realme LED Wi-Fi Smart Bulb",
+    "framework": "Angular",
+    "editor": "VS Code",
+    "os": "Windows 11",
+    "browser": [
+      "Microsoft Edge",
+      "Google Chrome",
+      "Mozilla Firefox",
+      "Opera",
+      "Brave"
+    ],
+    "searchengine": "Google",
+    "mail": "Gmail",
+    "cloud": "Google Drive",
+    "notes": [
+      "Google Keep",
+      "Notion"
+    ],
+    "database": [
+      "Firebase",
+      "MongoDB",
+      "MySQL"
+    ],
+    "hosting": [
+      "Firebase",
+      "Netlify",
+      "Vercel"
+    ],
+    "frontend": [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "TypeScript",
+      "Angular",
+      "Astro",
+      "Gatsby",
+      "Next.js"
+    ],
+    "backend": [
+      "Node",
+      "Express"
+    ],
+    "api": [
+      "REST",
+      "GraphQL"
+    ],
+    "vcs": "Git",
+    "ci": "GitHub Actions",
+    "design": "Figma",
+    "video": "VLC Media Player",
+    "audio": "VLC Media Player",
+    "social": [
+      "Twitter",
+      "LinkedIn",
+      "Instagram",
+      "Facebook"
+    ],
+    "ecommerce": [
+      "Amazon",
+      "Flipkart"
+    ],
+    "food": [
+      "Swiggy",
+      "Zomato"
+    ],
+    "travel": [
+      "Uber",
+      "Ola"
+    ],
+    "bank": [
+      "SBI"
+    ]
+  }
 ]

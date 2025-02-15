@@ -1,6 +1,6 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const trendingReposController = require("../controllers/trendingReposController");
+const trendingReposController = require('../controllers/trendingReposController');
 
 /**
  * @swagger
@@ -37,6 +37,6 @@ const trendingReposController = require("../controllers/trendingReposController"
  *               items:
  *                 type: object
  */
-router.get("/trending-repos", trendingReposController.getTrendingRepos);
+router.get('/trending-repos', trendingReposController.getTrendingRepos);
 
 module.exports = router;

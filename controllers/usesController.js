@@ -1,32 +1,19 @@
-const Uses = require('../models/uses');
+const fs = require('fs');
+const path = require('path');
 
-exports.getAllUses = (req, res, next) => {
-    Uses.find({})
-        .then((data) => res.send(data))
-        .catch(next);
-};
+exports.getUses = (req, res) => {
+  const filePath = path.join(__dirname, '../assets/data/uses.json');
 
-exports.getUseById = (req, res, next) => {
-    Uses.findOne({ _id: req.params.id })
-        .then((data) => res.send(data))
-        .catch(next);
-};
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error reading uses data', error: err });
+    }
 
-exports.createUse = (req, res, next) => {
-    Uses.create(req.body)
-        .then((data) => res.send(data))
-        .catch(next);
-};
-
-exports.updateUse = (req, res, next) => {
-    Uses.findOneAndUpdate({ _id: req.params.id }, req.body)
-        .then(() => Uses.findOne({ _id: req.params.id }))
-        .then((data) => res.send(data))
-        .catch(next);
-};
-
-exports.deleteUse = (req, res, next) => {
-    Uses.findOneAndDelete({ _id: req.params.id })
-        .then((data) => res.send(data))
-        .catch(next);
+    try {
+      const uses = JSON.parse(data);
+      res.status(200).json(uses);
+    } catch (parseError) {
+      res.status(500).json({ message: 'Error parsing uses data', error: parseError });
+    }
+  });
 };

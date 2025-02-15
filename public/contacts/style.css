@@ -2,8 +2,8 @@ header {
   text-align: center;
 }
 
-#errorMessage{
-    text-align: center;
+#errorMessage {
+  text-align: center;
 }
 
 table {
@@ -24,7 +24,7 @@ th {
 }
 
 .centered-message {
-    text-align: center;
+  text-align: center;
 }
 
 .button {

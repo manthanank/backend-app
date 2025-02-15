@@ -1,35 +1,13 @@
-const District = require("../models/districts");
+const fs = require('fs');
+const path = require('path');
 
-exports.getDistricts = (req, res, next) => {
-  District.find({})
-    .then((districts) => {
-      res.send(districts);
-    })
-    .catch(next);
-};
-
-exports.createDistrict = (req, res, next) => {
-  District.create(req.body)
-    .then((district) => {
-      res.send(district);
-    })
-    .catch(next);
-};
-
-exports.updateDistrict = (req, res, next) => {
-  District.findOneAndUpdate({ _id: req.params.id }, req.body)
-    .then(() => {
-      District.findOne({ _id: req.params.id }).then((district) => {
-        res.send(district);
-      });
-    })
-    .catch(next);
-};
-
-exports.deleteDistrict = (req, res, next) => {
-  District.findOneAndDelete({ _id: req.params.id })
-    .then((district) => {
-      res.send(district);
-    })
-    .catch(next);
+exports.getDistricts = async (req, res, next) => {
+  try {
+    const dataPath = path.join(__dirname, '../assets/data/states_districts.json');
+    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+    const districts = data[0].states.flatMap(state => state.districts);
+    res.send(districts);
+  } catch (error) {
+    next(error);
+  }
 };
