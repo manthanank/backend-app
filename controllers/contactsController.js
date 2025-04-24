@@ -31,22 +31,18 @@ exports.getContact = (req, res) => {
           .json({ success: false, message: 'Contact not found' });
       }
 
-      res
-        .status(200)
-        .json({
-          success: true,
-          message: 'Contact retrieved successfully',
-          data,
-        });
+      res.status(200).json({
+        success: true,
+        message: 'Contact retrieved successfully',
+        data,
+      });
     })
     .catch((error) => {
-      res
-        .status(500)
-        .json({
-          success: false,
-          message: 'Internal Server Error',
-          error: error.message,
-        });
+      res.status(500).json({
+        success: false,
+        message: 'Internal Server Error',
+        error: error.message,
+      });
     });
 };
 
@@ -61,24 +57,20 @@ exports.getContacts = (req, res) => {
       .limit(ITEMS_PER_PAGE),
   ])
     .then(([totalContacts, data]) => {
-      res
-        .status(200)
-        .json({
-          success: true,
-          message: 'Contacts retrieved successfully',
-          data,
-          count: data.length,
-          totalContacts,
-        });
+      res.status(200).json({
+        success: true,
+        message: 'Contacts retrieved successfully',
+        data,
+        count: data.length,
+        totalContacts,
+      });
     })
     .catch((error) => {
-      res
-        .status(500)
-        .json({
-          success: false,
-          message: 'Internal Server Error',
-          error: error.message,
-        });
+      res.status(500).json({
+        success: false,
+        message: 'Internal Server Error',
+        error: error.message,
+      });
     });
 };
 
@@ -96,12 +88,10 @@ exports.deleteContact = (req, res) => {
         .json({ success: true, message: 'Contact deleted successfully' });
     })
     .catch((error) => {
-      res
-        .status(500)
-        .json({
-          success: false,
-          message: 'Internal Server Error',
-          error: error.message,
-        });
+      res.status(500).json({
+        success: false,
+        message: 'Internal Server Error',
+        error: error.message,
+      });
     });
 };

@@ -8,7 +8,9 @@ exports.createSubscribers = async (req, res, next) => {
     const existingSubscriber = await Subscribers.findOne({ email });
 
     if (existingSubscriber) {
-      return res.send('Email already subscribed. Check your email for the welcome newsletter.');
+      return res.send(
+        'Email already subscribed. Check your email for the welcome newsletter.',
+      );
     }
 
     const newSubscriber = new Subscribers({ email });
@@ -18,14 +20,17 @@ exports.createSubscribers = async (req, res, next) => {
 
     const welcomeSubject = 'Welcome to Our Newsletter!';
     let welcomeContent = '<p>Thank you for subscribing to our newsletter!</p>';
-    const apiEndpoint = req.get('host') === 'localhost:3000'
-      ? 'http://localhost:3000'
-      : 'https://backend-app-manthanank.vercel.app/';
+    const apiEndpoint =
+      req.get('host') === 'localhost:3000'
+        ? 'http://localhost:3000'
+        : 'https://backend-app-manthanank.vercel.app/';
 
     welcomeContent += `<p><a href="${apiEndpoint}/unsubscribe?email=${email}">Unsubscribe</a></p>`;
     sendNewsletter(email, welcomeSubject, welcomeContent);
 
-    res.send('Subscription successful! Check your email for a welcome newsletter.');
+    res.send(
+      'Subscription successful! Check your email for a welcome newsletter.',
+    );
   } catch (error) {
     console.error('Error creating subscription:', error);
     next(error);
@@ -86,10 +91,14 @@ exports.deleteSubscriber = async (req, res) => {
     const data = await Subscribers.findOneAndDelete({ _id: req.params.id });
 
     if (!data) {
-      return res.status(404).json({ success: false, message: 'Subscriber not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: 'Subscriber not found' });
     }
 
-    res.status(200).json({ success: true, message: 'Subscriber deleted successfully' });
+    res
+      .status(200)
+      .json({ success: true, message: 'Subscriber deleted successfully' });
   } catch (error) {
     res.status(500).json({
       success: false,

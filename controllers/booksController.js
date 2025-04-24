@@ -15,12 +15,12 @@ class BookController {
     if (status >= 400) {
       return res.status(status).json({
         success: false,
-        error: typeof data === 'string' ? data : data.message
+        error: typeof data === 'string' ? data : data.message,
       });
     }
     return res.status(status).json({
       success: true,
-      data
+      data,
     });
   }
 
@@ -55,7 +55,11 @@ class BookController {
       const { id } = req.params;
       const { title, author } = req.body;
       if (!title && !author) {
-        return this.sendResponse(res, 400, 'At least one field (title or author) is required');
+        return this.sendResponse(
+          res,
+          400,
+          'At least one field (title or author) is required',
+        );
       }
       const book = await this.bookService.update(id, title, author);
       if (!book) {
@@ -74,7 +78,10 @@ class BookController {
       if (!book) {
         return this.sendResponse(res, 404, 'Book not found');
       }
-      return this.sendResponse(res, 200, { message: 'Book deleted successfully', book });
+      return this.sendResponse(res, 200, {
+        message: 'Book deleted successfully',
+        book,
+      });
     } catch (err) {
       return this.sendResponse(res, 500, err);
     }

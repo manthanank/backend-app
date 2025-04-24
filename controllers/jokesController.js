@@ -5,7 +5,7 @@ const getJokes = (req, res) => {
 };
 
 const getJokeById = (req, res) => {
-  const joke = jokes.find(j => j.id === parseInt(req.params.id));
+  const joke = jokes.find((j) => j.id === parseInt(req.params.id));
   if (!joke) {
     return res.status(404).json({ message: 'Joke not found' });
   }
@@ -20,5 +20,5 @@ const getRandomJoke = (req, res) => {
 module.exports = {
   getJokes,
   getJokeById,
-  getRandomJoke
+  getRandomJoke,
 };

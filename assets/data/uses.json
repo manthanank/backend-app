@@ -9,10 +9,7 @@
     "smartwatch": "Realme Watch 3",
     "watch": "Fastrack",
     "earbuds": "Boat Airdopes 161",
-    "headphones": [
-      "Boat Rockerz 450",
-      "Sony WH-CH520"
-    ],
+    "headphones": ["Boat Rockerz 450", "Sony WH-CH520"],
     "neckband": "Realme Bud 2",
     "smartbulb": "Realme LED Wi-Fi Smart Bulb",
     "framework": "Angular",
@@ -28,20 +25,9 @@
     "searchengine": "Google",
     "mail": "Gmail",
     "cloud": "Google Drive",
-    "notes": [
-      "Google Keep",
-      "Notion"
-    ],
-    "database": [
-      "Firebase",
-      "MongoDB",
-      "MySQL"
-    ],
-    "hosting": [
-      "Firebase",
-      "Netlify",
-      "Vercel"
-    ],
+    "notes": ["Google Keep", "Notion"],
+    "database": ["Firebase", "MongoDB", "MySQL"],
+    "hosting": ["Firebase", "Netlify", "Vercel"],
     "frontend": [
       "HTML",
       "CSS",
@@ -52,39 +38,17 @@
       "Gatsby",
       "Next.js"
     ],
-    "backend": [
-      "Node",
-      "Express"
-    ],
-    "api": [
-      "REST",
-      "GraphQL"
-    ],
+    "backend": ["Node", "Express"],
+    "api": ["REST", "GraphQL"],
     "vcs": "Git",
     "ci": "GitHub Actions",
     "design": "Figma",
     "video": "VLC Media Player",
     "audio": "VLC Media Player",
-    "social": [
-      "Twitter",
-      "LinkedIn",
-      "Instagram",
-      "Facebook"
-    ],
-    "ecommerce": [
-      "Amazon",
-      "Flipkart"
-    ],
-    "food": [
-      "Swiggy",
-      "Zomato"
-    ],
-    "travel": [
-      "Uber",
-      "Ola"
-    ],
-    "bank": [
-      "SBI"
-    ]
+    "social": ["Twitter", "LinkedIn", "Instagram", "Facebook"],
+    "ecommerce": ["Amazon", "Flipkart"],
+    "food": ["Swiggy", "Zomato"],
+    "travel": ["Uber", "Ola"],
+    "bank": ["SBI"]
   }
 ]

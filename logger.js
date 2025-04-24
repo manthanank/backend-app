@@ -45,12 +45,14 @@ if (process.env.NODE_ENV !== 'production') {
   logger.add(new transports.File({ filename: 'app.log', format: json() }));
 } else {
   // Add MongoDB transport for production
-  logger.add(new winstonMongoDB.MongoDB({
-    db: process.env.MONGODB_URI,
-    collection: 'logs',
-    format: json(),
-    level: 'info',
-  }));
+  logger.add(
+    new winstonMongoDB.MongoDB({
+      db: process.env.MONGODB_URI,
+      collection: 'logs',
+      format: json(),
+      level: 'info',
+    }),
+  );
 }
 
 // Add colors to the custom levels

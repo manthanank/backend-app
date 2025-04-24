@@ -6,7 +6,7 @@ const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
 exports.getStates = (req, res, next) => {
   try {
-    const states = data[0].states.map(state => state.state);
+    const states = data[0].states.map((state) => state.state);
     res.send(states);
   } catch (error) {
     next(error);
@@ -16,7 +16,7 @@ exports.getStates = (req, res, next) => {
 exports.getDistricts = (req, res, next) => {
   try {
     const stateName = req.params.state;
-    const state = data[0].states.find(state => state.state === stateName);
+    const state = data[0].states.find((state) => state.state === stateName);
     if (state) {
       res.send(state.districts);
     } else {
