@@ -1,0 +1,54 @@
+name: Dependency Vulnerability Scan
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'  # Run every Monday at 8:00 AM UTC
+  push:
+    branches: [ main ]
+    paths:
+      - 'package.json'
+      - 'package-lock.json'
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: npm audit
+        continue-on-error: true
+
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+
+      - name: Generate dependency report
+        run: |
+          echo "## Dependency Report" > dependency-report.md
+          echo "Generated on $(date)" >> dependency-report.md
+          echo "### Direct Dependencies" >> dependency-report.md
+          npm ls --depth=0 >> dependency-report.md
+          echo "### Outdated Packages" >> dependency-report.md
+          npm outdated --json | jq -r 'to_entries | .[] | "- \(.key): \(.value.current) → \(.value.latest)"' >> dependency-report.md 2>/dev/null || echo "No outdated packages" >> dependency-report.md
+
+      - name: Upload dependency report
+        uses: actions/upload-artifact@v3
+        with:
+          name: dependency-report
+          path: dependency-report.md

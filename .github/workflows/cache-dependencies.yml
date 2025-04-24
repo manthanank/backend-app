@@ -1,0 +1,50 @@
+name: Cache Dependencies
+
+on:
+  push:
+    paths:
+      - 'package.json'
+      - 'package-lock.json'
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  cache-deps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        run: echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache results info
+        run: |
+          echo "## Dependencies Cache Status" > cache-info.md
+          echo "- Cache hit: ${{ steps.npm-cache.outputs.cache-hit == 'true' && 'Yes' || 'No' }}" >> cache-info.md
+          echo "- Cache key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}" >> cache-info.md
+          echo "- Cached on: $(date)" >> cache-info.md
+
+      - name: Upload cache info
+        uses: actions/upload-artifact@v3
+        with:
+          name: cache-info
+          path: cache-info.md

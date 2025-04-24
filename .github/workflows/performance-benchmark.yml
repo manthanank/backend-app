@@ -1,0 +1,102 @@
+name: Performance Benchmark
+
+on:
+  schedule:
+    - cron: '0 5 * * 1'  # Run every Monday at 5:00 AM UTC
+  pull_request:
+    branches: [ main ]
+    types: [ labeled ]
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'benchmark')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install k6
+        run: |
+          curl -L https://github.com/grafana/k6/releases/download/v0.46.0/k6-v0.46.0-linux-amd64.tar.gz | tar xzf -
+          sudo mv k6-v0.46.0-linux-amd64/k6 /usr/local/bin/
+
+      - name: Start application in background
+        run: |
+          npm start &
+          sleep 10  # Give the app time to start up
+        env:
+          NODE_ENV: test
+          PORT: 3000
+
+      - name: Run API benchmarks
+        run: |
+          k6 run -o json=results.json - <<'EOT'
+          import http from 'k6/http';
+          import { check, sleep } from 'k6';
+          
+          export const options = {
+            vus: 10,
+            duration: '30s',
+            thresholds: {
+              'http_req_duration': ['p(95)<500'],
+              'http_req_failed': ['rate<0.01']
+            }
+          };
+          
+          export default function() {
+            const BASE_URL = 'http://localhost:3000';
+            
+            // Test endpoints
+            check(http.get(`${BASE_URL}/api/jokes`), {
+              'jokes status is 200': (r) => r.status === 200,
+              'jokes response time < 200ms': (r) => r.timings.duration < 200
+            });
+            
+            check(http.get(`${BASE_URL}/api/states`), {
+              'states status is 200': (r) => r.status === 200,
+              'states response time < 200ms': (r) => r.timings.duration < 200
+            });
+            
+            sleep(1);
+          }
+          EOT
+        
+      - name: Process benchmark results
+        run: |
+          echo "## Performance Benchmark Results" > benchmark-report.md
+          echo "Run on $(date)" >> benchmark-report.md
+          echo "### Summary" >> benchmark-report.md
+          cat results.json | jq -r '"- Requests: \(.metrics.http_reqs.values.count)\n- Avg Request Duration: \(.metrics.http_req_duration.values.avg)ms\n- 95th Percentile: \(.metrics.http_req_duration.values["p(95)"])ms\n- Failure Rate: \(.metrics.http_req_failed.values.rate * 100)%"' >> benchmark-report.md
+
+      - name: Save benchmark results
+        uses: actions/upload-artifact@v3
+        with:
+          name: benchmark-results
+          path: |
+            results.json
+            benchmark-report.md
+
+      - name: Comment PR with benchmark results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('benchmark-report.md', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: report
+            });
