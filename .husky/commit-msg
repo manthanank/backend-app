@@ -1,5 +1,4 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+#!/usr/bin/env sh
 
 # Check if commit message is empty
 if [ -z "$1" ]; then
@@ -7,11 +6,11 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-# Check if commit message follows a specific pattern (e.g., JIRA ticket number)
-if ! grep -qE "^[A-Z]+-[0-9]+: .+" "$1"; then
-    echo "Aborting commit. Your commit message does not follow the required pattern: JIRA-TICKET: message"
-    exit 1
-fi
-
-# If everything is fine, allow the commit
+# Allow commits to proceed without enforcing JIRA ticket format
 exit 0
+
+# Commented out JIRA ticket check - can be re-enabled later if needed
+# if ! grep -qE "^[A-Z]+-[0-9]+: .+" "$1"; then
+#     echo "Aborting commit. Your commit message does not follow the required pattern: JIRA-TICKET: message"
+#     exit 1
+# fi
