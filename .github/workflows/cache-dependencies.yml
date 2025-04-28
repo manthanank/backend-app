@@ -44,7 +44,7 @@ jobs:
           echo "- Cached on: $(date)" >> cache-info.md
 
       - name: Upload cache info
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cache-info
           path: cache-info.md

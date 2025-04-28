@@ -79,7 +79,7 @@ jobs:
           cat results.json | jq -r '"- Requests: \(.metrics.http_reqs.values.count)\n- Avg Request Duration: \(.metrics.http_req_duration.values.avg)ms\n- 95th Percentile: \(.metrics.http_req_duration.values["p(95)"])ms\n- Failure Rate: \(.metrics.http_req_failed.values.rate * 100)%"' >> benchmark-report.md
 
       - name: Save benchmark results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: benchmark-results
           path: |
