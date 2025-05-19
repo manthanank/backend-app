@@ -9,6 +9,7 @@ const options = {
       version: '1.0.0',
       description: 'API documentation for the Backend App',
     },
+    basePath: '/api',
   },
   apis: ['./routes/*.js', './controllers/*.js', './models/*.js'],
 };
@@ -22,6 +23,8 @@ const swaggerOptions = {
     defaultModelsExpandDepth: -1,
     defaultModelExpandDepth: 0,
     showRequestHeaders: false,
+    tryItOutEnabled: true,
+    persistAuthorization: true,
   },
 };
 
@@ -30,7 +33,7 @@ const CSS_URL =
 
 module.exports = (app) => {
   app.use(
-    '/api-docs',
+    '/api/docs',
     swaggerUi.serve,
     swaggerUi.setup(specs, swaggerOptions, { customCssUrl: CSS_URL }),
   );

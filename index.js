@@ -20,7 +20,17 @@ const PORT = process.env.PORT || 3000;
 connectDB();
 
 // Middleware
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "cdnjs.cloudflare.com"],
+      styleSrc: ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com"],
+      imgSrc: ["'self'", "data:", "validator.swagger.io"],
+      connectSrc: ["'self'", "https:"],
+    },
+  },
+}));
 app.use(cors({ origin: '*' }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
@@ -55,7 +65,7 @@ app.use('/api/uses', require('./routes/uses'));
 require('./swagger')(app);
 
 // Error handling
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {  // eslint-disable-line no-unused-vars
   logger.error(err.stack);
   res.status(500).send('Something went wrong!');
 });
@@ -91,4 +101,10 @@ app.get('/health', (req, res) => {
 
 app.listen(PORT, () => {
   logger.info(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+  const domain = process.env.NODE_ENV === 'production' 
+    ? 'backend-app-manthanank.vercel.app' 
+    : `localhost:${PORT}`;
+  const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
+  logger.info(`Visit ${protocol}://${domain}/health for health check`);
+  logger.info(`Visit ${protocol}://${domain}/api/docs for API documentation`);
 });
