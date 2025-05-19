@@ -32,11 +32,37 @@ jobs:
 
       - name: Start application in background
         run: |
-          npm start &
-          sleep 10  # Give the app time to start up
-        env:
-          NODE_ENV: test
-          PORT: 3000
+          # Start the server with output redirection for debugging
+          NODE_ENV=test PORT=3000 npm start > server.log 2>&1 &
+          echo "Server started with PID $!"
+          
+          # Store the PID for potential troubleshooting
+          echo $! > server.pid
+          
+          # Wait longer for the server to start - 20 seconds instead of 10
+          echo "Waiting 20 seconds for server to start..."
+          sleep 20
+
+      - name: Verify server is running
+        run: |
+          # Check if server process is still running
+          if ps -p $(cat server.pid) > /dev/null; then
+            echo "Server process is running"
+          else
+            echo "Server process is not running. Check server.log for details"
+            cat server.log
+            exit 1
+          fi
+          
+          # Try to connect to the server
+          echo "Checking if server responds to requests..."
+          if curl -s -f http://localhost:3000/health || curl -s -f http://localhost:3000/; then
+            echo "Server is responding to requests"
+          else
+            echo "Server is not responding. Check server.log for details"
+            cat server.log
+            exit 1
+          fi
 
       - name: Run API benchmarks
         run: |
@@ -72,19 +98,40 @@ jobs:
           EOT
         
       - name: Process benchmark results
+        if: always()
         run: |
-          echo "## Performance Benchmark Results" > benchmark-report.md
-          echo "Run on $(date)" >> benchmark-report.md
-          echo "### Summary" >> benchmark-report.md
-          cat results.json | jq -r '"- Requests: \(.metrics.http_reqs.values.count)\n- Avg Request Duration: \(.metrics.http_req_duration.values.avg)ms\n- 95th Percentile: \(.metrics.http_req_duration.values["p(95)"])ms\n- Failure Rate: \(.metrics.http_req_failed.values.rate * 100)%"' >> benchmark-report.md
+          # Check if server is running - for debugging failed tests
+          if [ -f server.pid ] && ps -p $(cat server.pid) > /dev/null; then
+            echo "Server was still running during tests"
+          else
+            echo "Server was not running during tests"
+            if [ -f server.log ]; then
+              echo "Server log content:"
+              cat server.log
+            fi
+          fi
+          
+          # Create the report if results exist
+          if [ -f results.json ]; then
+            echo "## Performance Benchmark Results" > benchmark-report.md
+            echo "Run on $(date)" >> benchmark-report.md
+            echo "### Summary" >> benchmark-report.md
+            cat results.json | jq -r '"- Requests: \(.metrics.http_reqs.values.count)\n- Avg Request Duration: \(.metrics.http_req_duration.values.avg)ms\n- 95th Percentile: \(.metrics.http_req_duration.values["p(95)"])ms\n- Failure Rate: \(.metrics.http_req_failed.values.rate * 100)%"' >> benchmark-report.md
+          else
+            echo "## Performance Benchmark Failed" > benchmark-report.md
+            echo "Run on $(date)" >> benchmark-report.md
+            echo "Tests could not be completed because the server was unavailable." >> benchmark-report.md
+          fi
 
       - name: Save benchmark results
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: benchmark-results
           path: |
             results.json
             benchmark-report.md
+            server.log
 
       - name: Comment PR with benchmark results
         if: github.event_name == 'pull_request'
