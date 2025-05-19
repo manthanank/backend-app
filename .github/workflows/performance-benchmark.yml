@@ -32,16 +32,31 @@ jobs:
 
       - name: Start application in background
         run: |
-          # Start the server with output redirection for debugging
-          NODE_ENV=test PORT=3000 npm start > server.log 2>&1 &
+          # Start the server WITHOUT watch mode - it causes issues in CI
+          NODE_ENV=test PORT=3000 node index.js > server.log 2>&1 &
           echo "Server started with PID $!"
           
           # Store the PID for potential troubleshooting
           echo $! > server.pid
           
-          # Wait longer for the server to start - 20 seconds instead of 10
-          echo "Waiting 20 seconds for server to start..."
-          sleep 20
+          # Wait for the server to start
+          echo "Waiting for server to start..."
+          sleep 5
+          
+          # Wait with progressively increasing retry intervals (total ~25 seconds)
+          max_attempts=10
+          attempt=1
+          
+          while [ $attempt -le $max_attempts ]; do
+            if curl -s -f http://localhost:3000/health > /dev/null || curl -s -f http://localhost:3000/ > /dev/null; then
+              echo "Server is responding after attempt $attempt"
+              break
+            fi
+            
+            echo "Attempt $attempt/$max_attempts - Server not ready yet..."
+            sleep $(( attempt * 2 ))
+            attempt=$((attempt+1))
+          done
 
       - name: Verify server is running
         run: |
@@ -56,7 +71,7 @@ jobs:
           
           # Try to connect to the server
           echo "Checking if server responds to requests..."
-          if curl -s -f http://localhost:3000/health || curl -s -f http://localhost:3000/; then
+          if curl -s -f http://localhost:3000/health || curl -s -f http://localhost:3000/api/jokes || curl -s -f http://localhost:3000/; then
             echo "Server is responding to requests"
           else
             echo "Server is not responding. Check server.log for details"
