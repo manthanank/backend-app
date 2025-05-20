@@ -108,7 +108,7 @@ const bookController = new BookController();
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/books', validateBook, (req, res) => bookController.create(req, res));
+router.post('/books', validateBook, bookController.create.bind(bookController));
 
 /**
  * @swagger
@@ -148,7 +148,7 @@ router.post('/books', validateBook, (req, res) => bookController.create(req, res
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/books/:id', validateBookId, (req, res) => bookController.read(req, res));
+router.get('/books/:id', validateBookId, bookController.read.bind(bookController));
 
 /**
  * @swagger
@@ -189,7 +189,7 @@ router.get('/books/:id', validateBookId, (req, res) => bookController.read(req, 
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/books/:id', validateBookUpdate, (req, res) => bookController.update(req, res));
+router.put('/books/:id', validateBookUpdate, bookController.update.bind(bookController));
 
 /**
  * @swagger
@@ -235,7 +235,7 @@ router.put('/books/:id', validateBookUpdate, (req, res) => bookController.update
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/books/:id', validateBookId, (req, res) => bookController.delete(req, res));
+router.delete('/books/:id', validateBookId, bookController.delete.bind(bookController));
 
 /**
  * @swagger
@@ -321,7 +321,7 @@ router.get('/books/search', (req, res) => bookController.search(req, res));
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/books/author/:author', (req, res) => bookController.getByAuthor(req, res));
+router.get('/books/author/:author', bookController.getByAuthor.bind(bookController));
 
 /**
  * @swagger
@@ -415,6 +415,6 @@ router.get('/books/author/:author', (req, res) => bookController.getByAuthor(req
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/books', validateBookQuery, (req, res) => bookController.getAll(req, res));
+router.get('/books', validateBookQuery, bookController.getAll.bind(bookController));
 
 module.exports = router;

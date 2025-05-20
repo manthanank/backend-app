@@ -48,6 +48,10 @@ npm start
 - [winston](https://www.npmjs.com/package/winston): A logger for just about everything.
 - [moment](https://www.npmjs.com/package/moment): Parse, validate, manipulate, and display dates and times in JavaScript.
 - [lodash](https://www.npmjs.com/package/lodash): A modern JavaScript utility library delivering modularity, performance & extras.
+- [express-validator](https://www.npmjs.com/package/express-validator): Express middleware for validation and sanitization.
+- [compression](https://www.npmjs.com/package/compression): Compression middleware for Express responses.
+- [morgan](https://www.npmjs.com/package/morgan): HTTP request logger middleware for Node.js.
+- [express-rate-limit](https://www.npmjs.com/package/express-rate-limit): Basic rate-limiting middleware for Express.
 
 ## Development Dependencies
 
