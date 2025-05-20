@@ -6,12 +6,49 @@ const contactsController = require('../controllers/contactsController');
  * @swagger
  * tags:
  *   name: Contacts
- *   description: Contact management
+ *   description: Contact management API endpoints
  */
 
 /**
  * @swagger
- * /api/contact:
+ * components:
+ *   schemas:
+ *     Contact:
+ *       type: object
+ *       required:
+ *         - name
+ *         - email
+ *         - message
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Name of the contact
+ *         email:
+ *           type: string
+ *           description: Email address of the contact
+ *         message:
+ *           type: string
+ *           description: Message from the contact
+ *     ErrorResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *           description: Indicates if the operation was successful
+ *         message:
+ *           type: string
+ *           description: Error message
+ *         error:
+ *           type: string
+ *           description: Detailed error information (if available)
+ */
+
+// Create a router prefix for contacts endpoints
+const contactsRouter = express.Router();
+
+/**
+ * @swagger
+ * /api/contacts:
  *   post:
  *     summary: Submit a contact form
  *     tags: [Contacts]
@@ -20,14 +57,7 @@ const contactsController = require('../controllers/contactsController');
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               email:
- *                 type: string
- *               message:
- *                 type: string
+ *             $ref: '#/components/schemas/Contact'
  *     responses:
  *       201:
  *         description: Contact form submitted successfully
@@ -43,45 +73,57 @@ const contactsController = require('../controllers/contactsController');
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         description: Internal server error
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post('/contact', contactsController.submitForm);
+contactsRouter.post('/', contactsController.submitForm);
 
 /**
  * @swagger
  * /api/contacts:
  *   get:
- *     summary: Get all contacts
+ *     summary: Get all contacts with pagination
  *     tags: [Contacts]
  *     parameters:
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
+ *           default: 1
  *         description: Page number for pagination
  *     responses:
  *       200:
- *         description: A list of contacts
+ *         description: List of contacts retrieved successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Contact'
+ *                 count:
+ *                   type: integer
+ *                 totalContacts:
+ *                   type: integer
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/contacts', contactsController.getContacts);
+contactsRouter.get('/', contactsController.getContacts);
 
 /**
  * @swagger
@@ -98,13 +140,32 @@ router.get('/contacts', contactsController.getContacts);
  *         description: The contact ID
  *     responses:
  *       200:
- *         description: A contact object
+ *         description: Contact retrieved successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/Contact'
+ *       404:
+ *         description: Contact not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/contacts/:id', contactsController.getContact);
+contactsRouter.get('/:id', contactsController.getContact);
 
 /**
  * @swagger
@@ -121,12 +182,35 @@ router.get('/contacts/:id', contactsController.getContact);
  *         description: The contact ID
  *     responses:
  *       200:
- *         description: The deleted contact
+ *         description: Contact deleted successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       404:
+ *         description: Contact not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.delete('/contacts/:id', contactsController.deleteContact);
+contactsRouter.delete('/:id', contactsController.deleteContact);
+
+// Mount the contacts router
+router.use('/contacts', contactsRouter);
+
+// Add the legacy endpoint that uses '/contact' (for backward compatibility)
+router.post('/contact', contactsController.submitForm);
 
 module.exports = router;
