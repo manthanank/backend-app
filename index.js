@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const path = require('path');
 const helmet = require('helmet');
 const logger = require('./logger');
@@ -32,9 +31,8 @@ app.use(helmet({
   },
 }));
 app.use(cors({ origin: '*' }));
-app.use(bodyParser.json());
-app.use(express.static('public'));
 app.use(express.json());
+app.use(express.static('public'));
 app.use(morgan('combined'));
 app.use(compression());
 
@@ -44,7 +42,6 @@ const limiter = rateLimit({
   max: 100, // limit each IP to 100 requests per windowMs
 });
 app.use(limiter);
-app.use(errorHandler);
 
 // Routes
 app.use('/api', require('./routes/states'));
@@ -64,11 +61,8 @@ app.use('/api/uses', require('./routes/uses'));
 // Swagger setup
 require('./swagger')(app);
 
-// Error handling
-app.use((err, req, res, next) => {  // eslint-disable-line no-unused-vars
-  logger.error(err.stack);
-  res.status(500).send('Something went wrong!');
-});
+// Error handling middleware (must be after routes)
+app.use(errorHandler);
 
 // Serve static files
 if (process.env.NODE_ENV === 'production') {
