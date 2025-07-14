@@ -1,4 +1,6 @@
 require('dotenv').config();
+// Validate required environment variables before proceeding
+require('./config/validateEnv')();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -44,7 +46,6 @@ const limiter = rateLimit({
   max: 100, // limit each IP to 100 requests per windowMs
 });
 app.use(limiter);
-app.use(errorHandler);
 
 // Routes
 app.use('/api', require('./routes/states'));
@@ -59,16 +60,14 @@ app.use('/api', require('./routes/notes'));
 app.use('/api', otpRoutes);
 app.use('/api/locations', require('./routes/locations'));
 app.use('/api/jokes', require('./routes/jokes'));
+
 app.use('/api/uses', require('./routes/uses'));
+
+// Global error handler should be registered after all route declarations
+app.use(errorHandler);
 
 // Swagger setup
 require('./swagger')(app);
-
-// Error handling
-app.use((err, req, res, next) => {  // eslint-disable-line no-unused-vars
-  logger.error(err.stack);
-  res.status(500).send('Something went wrong!');
-});
 
 // Serve static files
 if (process.env.NODE_ENV === 'production') {

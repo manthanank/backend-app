@@ -11,7 +11,7 @@ function generateOTP() {
 }
 
 // Send OTP to the provided email
-exports.sendOTP = async (req, res) => {
+exports.sendOTP = async (req, res, next) => {
   try {
     const { email } = req.query;
     const otp = generateOTP(); // Generate a 6-digit OTP
@@ -28,12 +28,12 @@ exports.sendOTP = async (req, res) => {
     res.status(200).json({ success: true, message: 'OTP sent successfully' });
   } catch (error) {
     console.error('Error sending OTP:', error);
-    res.status(500).json({ success: false, error: 'Internal server error' });
+    next(error);
   }
 };
 
 // Verify OTP provided by the user
-exports.verifyOTP = async (req, res) => {
+exports.verifyOTP = async (req, res, next) => {
   try {
     const { email, otp } = req.query;
     const existingOTP = await Otps.findOneAndDelete({ email, otp });
@@ -49,6 +49,6 @@ exports.verifyOTP = async (req, res) => {
     }
   } catch (error) {
     console.error('Error verifying OTP:', error);
-    res.status(500).json({ success: false, error: 'Internal server error' });
+    next(error);
   }
 };

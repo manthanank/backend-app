@@ -58,7 +58,7 @@ exports.unsubscribe = async (req, res, next) => {
   }
 };
 
-exports.getSubscribers = async (req, res) => {
+exports.getSubscribers = async (req, res, next) => {
   const page = parseInt(req.query.page) || 1;
   const ITEMS_PER_PAGE = 10;
 
@@ -78,15 +78,11 @@ exports.getSubscribers = async (req, res) => {
       totalSubscribers,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Internal Server Error',
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-exports.deleteSubscriber = async (req, res) => {
+exports.deleteSubscriber = async (req, res, next) => {
   try {
     const data = await Subscribers.findOneAndDelete({ _id: req.params.id });
 
@@ -100,10 +96,6 @@ exports.deleteSubscriber = async (req, res) => {
       .status(200)
       .json({ success: true, message: 'Subscriber deleted successfully' });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Internal Server Error',
-      error: error.message,
-    });
+    next(error);
   }
 };

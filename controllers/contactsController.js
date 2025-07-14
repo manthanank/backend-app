@@ -6,7 +6,7 @@ const Contact = require('../models/contacts.js');
  * @route POST /api/contacts
  * @access Public
  */
-exports.submitForm = async (req, res) => {
+exports.submitForm = async (req, res, next) => {
   try {
     const { name, email, message } = req.body;
 
@@ -27,12 +27,7 @@ exports.submitForm = async (req, res) => {
       message: 'Contact form submitted successfully' 
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ 
-      success: false,
-      message: 'Internal server error',
-      error: error.message 
-    });
+    next(error);
   }
 };
 
@@ -41,7 +36,7 @@ exports.submitForm = async (req, res) => {
  * @route GET /api/contacts/:id
  * @access Public
  */
-exports.getContact = async (req, res) => {
+exports.getContact = async (req, res, next) => {
   try {
     const contact = await Contact.findById(req.params.id);
     
@@ -57,11 +52,7 @@ exports.getContact = async (req, res) => {
       data: contact,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Internal Server Error',
-      error: error.message,
-    });
+    next(error);
   }
 };
 
@@ -70,7 +61,7 @@ exports.getContact = async (req, res) => {
  * @route GET /api/contacts
  * @access Public
  */
-exports.getContacts = async (req, res) => {
+exports.getContacts = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page, 10) || 1;
     const ITEMS_PER_PAGE = 10;
@@ -93,11 +84,7 @@ exports.getContacts = async (req, res) => {
       currentPage: page
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Internal Server Error',
-      error: error.message,
-    });
+    next(error);
   }
 };
 
@@ -106,7 +93,7 @@ exports.getContacts = async (req, res) => {
  * @route DELETE /api/contacts/:id
  * @access Public
  */
-exports.deleteContact = async (req, res) => {
+exports.deleteContact = async (req, res, next) => {
   try {
     const deletedContact = await Contact.findByIdAndDelete(req.params.id);
     
@@ -121,10 +108,6 @@ exports.deleteContact = async (req, res) => {
       message: 'Contact deleted successfully' 
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Internal Server Error',
-      error: error.message,
-    });
+    next(error);
   }
 };

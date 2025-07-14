@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-exports.getTrendingRepos = (req, res) => {
+exports.getTrendingRepos = (req, res, next) => {
   const language = req.query.language || 'All';
   const period = req.query.period || 'past_week';
 
@@ -12,7 +12,6 @@ exports.getTrendingRepos = (req, res) => {
       res.json(response.data);
     })
     .catch((error) => {
-      console.error(error);
-      res.status(500).send('Error fetching data from the API endpoint');
+      next(error);
     });
 };
