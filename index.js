@@ -44,7 +44,6 @@ const limiter = rateLimit({
   max: 100, // limit each IP to 100 requests per windowMs
 });
 app.use(limiter);
-app.use(errorHandler);
 
 // Routes
 app.use('/api', require('./routes/states'));
@@ -63,12 +62,6 @@ app.use('/api/uses', require('./routes/uses'));
 
 // Swagger setup
 require('./swagger')(app);
-
-// Error handling
-app.use((err, req, res, next) => {  // eslint-disable-line no-unused-vars
-  logger.error(err.stack);
-  res.status(500).send('Something went wrong!');
-});
 
 // Serve static files
 if (process.env.NODE_ENV === 'production') {
@@ -98,6 +91,9 @@ app.get('/health', (req, res) => {
 
   res.status(200).json(healthInfo);
 });
+
+// Error handling middleware (must be after all routes)
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   logger.info(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
