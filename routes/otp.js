@@ -12,16 +12,22 @@ const { sendOTP, verifyOTP } = require('../controllers/otpController');
 /**
  * @swagger
  * /api/sendOTP:
- *   get:
+ *   post:
  *     summary: Send OTP to the provided email
  *     tags: [OTP]
- *     parameters:
- *       - in: query
- *         name: email
- *         schema:
- *           type: string
- *         required: true
- *         description: The email to send the OTP to
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: The email to send the OTP to
+ *             required:
+ *               - email
  *     responses:
  *       200:
  *         description: OTP sent successfully
@@ -46,27 +52,31 @@ const { sendOTP, verifyOTP } = require('../controllers/otpController');
  *                 error:
  *                   type: string
  */
-router.get('/sendOTP', sendOTP);
+router.post('/sendOTP', sendOTP);
 
 /**
  * @swagger
  * /api/verifyOTP:
- *   get:
+ *   post:
  *     summary: Verify the provided OTP
  *     tags: [OTP]
- *     parameters:
- *       - in: query
- *         name: email
- *         schema:
- *           type: string
- *         required: true
- *         description: The email associated with the OTP
- *       - in: query
- *         name: otp
- *         schema:
- *           type: string
- *         required: true
- *         description: The OTP to verify
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: The email associated with the OTP
+ *               otp:
+ *                 type: string
+ *                 description: The OTP to verify
+ *             required:
+ *               - email
+ *               - otp
  *     responses:
  *       200:
  *         description: OTP verification successful
@@ -102,6 +112,6 @@ router.get('/sendOTP', sendOTP);
  *                 error:
  *                   type: string
  */
-router.get('/verifyOTP', verifyOTP);
+router.post('/verifyOTP', verifyOTP);
 
 module.exports = router;

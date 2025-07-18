@@ -1,5 +1,6 @@
 require('dotenv').config();
 const { Client } = require('@notionhq/client');
+const logger = require('../logger');
 
 // Init client
 const notion = new Client({
@@ -60,7 +61,7 @@ module.exports = {
         note: note,
       };
     } catch (error) {
-      console.error('Error creating note:', error.body);
+      logger.error('Error creating note:', error.body);
       throw error;
     }
   },
@@ -74,7 +75,7 @@ module.exports = {
       };
       return note;
     } catch (error) {
-      console.error(`Failed to retrieve note with ID ${id}: ${error}`);
+      logger.error(`Failed to retrieve note with ID ${id}:`, error);
       throw error;
     }
   },
@@ -102,7 +103,7 @@ module.exports = {
       });
       return response;
     } catch (error) {
-      console.error(`Failed to update note with ID ${id}: ${error}`);
+      logger.error(`Failed to update note with ID ${id}:`, error);
       throw error;
     }
   },
@@ -114,7 +115,7 @@ module.exports = {
       });
       return response;
     } catch (error) {
-      console.error(`Failed to delete note with ID ${id}: ${error}`);
+      logger.error(`Failed to delete note with ID ${id}:`, error);
       throw error;
     }
   },

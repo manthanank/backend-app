@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const Contact = require('../models/contacts.js');
+const logger = require('../logger');
 
 /**
  * Submit a new contact form
@@ -27,7 +28,7 @@ exports.submitForm = async (req, res) => {
       message: 'Contact form submitted successfully' 
     });
   } catch (error) {
-    console.error(error);
+    logger.error('Error in contacts controller:', error);
     res.status(500).json({ 
       success: false,
       message: 'Internal server error',

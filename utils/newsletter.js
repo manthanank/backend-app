@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const logger = require('../logger');
 require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
@@ -19,9 +20,9 @@ const sendNewsletter = (email, subject, content) => {
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.error(error);
+      logger.error('Newsletter error:', error);
     } else {
-      console.log('Newsletter sent: ' + info.response);
+              logger.info('Newsletter sent: ' + info.response);
     }
   });
 };

@@ -1,4 +1,5 @@
 const axios = require('axios');
+const logger = require('../logger');
 
 exports.getTrendingRepos = (req, res) => {
   const language = req.query.language || 'All';
@@ -12,7 +13,7 @@ exports.getTrendingRepos = (req, res) => {
       res.json(response.data);
     })
     .catch((error) => {
-      console.error(error);
+      logger.error('Trending repos error:', error);
       res.status(500).send('Error fetching data from the API endpoint');
     });
 };

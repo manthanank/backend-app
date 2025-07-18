@@ -1,5 +1,6 @@
 const Subscribers = require('../models/subscribers.js');
 const { sendNewsletter } = require('../utils/newsletter.js');
+const logger = require('../logger');
 
 exports.createSubscribers = async (req, res, next) => {
   const email = req.body.email;
@@ -16,7 +17,7 @@ exports.createSubscribers = async (req, res, next) => {
     const newSubscriber = new Subscribers({ email });
     await newSubscriber.save();
 
-    console.log(`New subscription: ${email}`);
+    logger.info(`New subscription: ${email}`);
 
     const welcomeSubject = 'Welcome to Our Newsletter!';
     let welcomeContent = '<p>Thank you for subscribing to our newsletter!</p>';
@@ -32,7 +33,7 @@ exports.createSubscribers = async (req, res, next) => {
       'Subscription successful! Check your email for a welcome newsletter.',
     );
   } catch (error) {
-    console.error('Error creating subscription:', error);
+          logger.error('Error creating subscription:', error);
     next(error);
   }
 };
@@ -49,11 +50,11 @@ exports.unsubscribe = async (req, res, next) => {
 
     await Subscribers.findOneAndDelete({ email });
 
-    console.log(`Subscription deleted: ${email}`);
+    logger.info(`Subscription deleted: ${email}`);
 
     res.send('Unsubscribed successfully.');
   } catch (error) {
-    console.error('Error unsubscribing:', error);
+          logger.error('Error unsubscribing:', error);
     next(error);
   }
 };

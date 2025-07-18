@@ -1,6 +1,7 @@
 const Otps = require('../models/otp.js');
 const randomstring = require('randomstring');
 const sendEmail = require('../utils/sendEmails.js');
+const logger = require('../logger');
 
 // Generate OTP
 function generateOTP() {
@@ -13,7 +14,13 @@ function generateOTP() {
 // Send OTP to the provided email
 exports.sendOTP = async (req, res) => {
   try {
-    const { email } = req.query;
+    const { email } = req.body;
+    
+    // Validate email
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ success: false, error: 'Invalid email address' });
+    }
+
     const otp = generateOTP(); // Generate a 6-digit OTP
     const newOTP = new Otps({ email, otp });
     await newOTP.save();
@@ -27,7 +34,7 @@ exports.sendOTP = async (req, res) => {
 
     res.status(200).json({ success: true, message: 'OTP sent successfully' });
   } catch (error) {
-    console.error('Error sending OTP:', error);
+    logger.error('Error sending OTP:', error);
     res.status(500).json({ success: false, error: 'Internal server error' });
   }
 };
@@ -35,7 +42,17 @@ exports.sendOTP = async (req, res) => {
 // Verify OTP provided by the user
 exports.verifyOTP = async (req, res) => {
   try {
-    const { email, otp } = req.query;
+    const { email, otp } = req.body;
+    
+    // Validate inputs
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ success: false, error: 'Invalid email address' });
+    }
+    
+    if (!otp || !/^\d{6}$/.test(otp)) {
+      return res.status(400).json({ success: false, error: 'Invalid OTP format' });
+    }
+
     const existingOTP = await Otps.findOneAndDelete({ email, otp });
 
     if (existingOTP) {
@@ -48,7 +65,7 @@ exports.verifyOTP = async (req, res) => {
       res.status(400).json({ success: false, error: 'Invalid OTP' });
     }
   } catch (error) {
-    console.error('Error verifying OTP:', error);
+    logger.error('Error verifying OTP:', error);
     res.status(500).json({ success: false, error: 'Internal server error' });
   }
 };
