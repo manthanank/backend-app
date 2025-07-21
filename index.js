@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const path = require('path');
 const helmet = require('helmet');
 const logger = require('./logger');
@@ -32,7 +31,6 @@ app.use(helmet({
   },
 }));
 app.use(cors({ origin: '*' }));
-app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use(express.json());
 app.use(morgan('combined'));
@@ -51,7 +49,6 @@ app.use('/api', require('./routes/states'));
 app.use('/api', require('./routes/districts'));
 app.use('/api', require('./routes/simpleapis'));
 app.use('/api', require('./routes/ossinsight'));
-app.use('/api', require('./routes/contacts'));
 app.use('/api', require('./routes/subscribers'));
 app.use('/api', require('./routes/items'));
 app.use('/api', require('./routes/books'));

@@ -33,7 +33,6 @@ npm start
 ## Dependencies
 
 - [axios](https://www.npmjs.com/package/axios): Promise-based HTTP client for the browser and Node.js
-- [body-parser](https://www.npmjs.com/package/body-parser): Node.js body parsing middleware
 - [cors](https://www.npmjs.com/package/cors): Middleware for enabling Cross-Origin Resource Sharing (CORS)
 - [dotenv](https://www.npmjs.com/package/dotenv): Loads environment variables from a `.env` file
 - [express](https://www.npmjs.com/package/express): Web framework for Node.js
