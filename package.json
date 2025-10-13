@@ -38,7 +38,7 @@
   "author": "Manthan Ankolekar",
   "license": "MIT",
   "dependencies": {
-    "@notionhq/client": "^2.3.0",
+    "@notionhq/client": "^5.1.0",
     "axios": "^1.12.2",
     "bcrypt": "^5.1.1",
     "compression": "^1.8.1",

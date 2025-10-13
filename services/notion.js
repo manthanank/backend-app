@@ -4,14 +4,42 @@ const { Client } = require('@notionhq/client');
 // Init client
 const notion = new Client({
   auth: process.env.NOTION_TOKEN,
+  notionVersion: '2025-09-03',
 });
 
 const database_id = process.env.NOTION_DATABASE_ID;
 
+// Cache for data source ID to avoid repeated API calls
+let dataSourceId = null;
+
+// Function to get data source ID from database ID
+async function getDataSourceId() {
+  if (dataSourceId) {
+    return dataSourceId;
+  }
+
+  try {
+    const response = await notion.databases.retrieve({
+      database_id: database_id,
+    });
+    
+    if (response.data_sources && response.data_sources.length > 0) {
+      dataSourceId = response.data_sources[0].id;
+      return dataSourceId;
+    } else {
+      throw new Error('No data sources found for database');
+    }
+  } catch (error) {
+    console.error('Failed to fetch data source ID:', error);
+    throw error;
+  }
+}
+
 module.exports = {
   getNotes: async function () {
+    const sourceId = await getDataSourceId();
     const payload = {
-      path: `databases/${database_id}/query`,
+      path: `data_sources/${sourceId}/query`,
       method: 'POST',
     };
 
@@ -29,11 +57,15 @@ module.exports = {
   },
   createNote: async function (note) {
     const currentDate = new Date().toISOString();
+    const sourceId = await getDataSourceId();
     const payload = {
       path: 'pages',
       method: 'POST',
       body: {
-        parent: { database_id: database_id },
+        parent: { 
+          type: 'data_source_id',
+          data_source_id: sourceId 
+        },
         properties: {
           Note: {
             title: [
