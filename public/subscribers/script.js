@@ -96,8 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Update current page display
       updateCurrentPageDisplay();
-    } catch (error) {
-      console.error('Error fetching subscribers:', error);
+    } catch {
       displayErrorMessage('An error occurred while fetching subscribers.');
       displayNoSubscribersMessage();
     }
@@ -164,8 +163,7 @@ document.addEventListener('DOMContentLoaded', function () {
           currentPage++;
           await fetchAndPopulateSubscribers(currentPage);
         }
-      } catch (error) {
-        console.error('Error fetching subscribers:', error);
+      } catch {
         displayErrorMessage('An error occurred while fetching subscribers.');
       }
     });
@@ -204,8 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-    } catch (error) {
-      console.error('Error deleting subscriber:', error);
+    } catch {
       displayErrorMessage('An error occurred while deleting the subscriber.');
     }
   }

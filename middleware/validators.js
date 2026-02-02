@@ -16,40 +16,44 @@ const validate = (req, res, next) => {
 };
 
 /**
- * Item validation rules
+ * Item validation rules with sanitization
  */
 const itemValidationRules = [
   body('name')
     .trim()
+    .escape() // Escape HTML characters for XSS protection
     .isLength({ min: 2, max: 100 })
     .withMessage('Name must be between 2 and 100 characters'),
   body('description')
     .optional()
     .trim()
+    .escape() // Escape HTML characters
     .isLength({ max: 1000 })
     .withMessage('Description cannot exceed 1000 characters'),
   body('price')
     .isNumeric()
     .withMessage('Price must be a number')
-    .custom(value => value >= 0)
-    .withMessage('Price cannot be negative'),
+    .custom((value) => value >= 0)
+    .withMessage('Price cannot be negative')
+    .toFloat(), // Sanitize to float
   body('quantity')
     .optional()
     .isInt({ min: 0 })
-    .withMessage('Quantity must be a non-negative integer'),
+    .withMessage('Quantity must be a non-negative integer')
+    .toInt(), // Sanitize to integer
   body('isAvailable')
     .optional()
     .isBoolean()
-    .withMessage('isAvailable must be a boolean'),
+    .withMessage('isAvailable must be a boolean')
+    .toBoolean(), // Sanitize to boolean
   body('category')
     .optional()
     .trim()
+    .escape() // Escape HTML
     .isString()
     .withMessage('Category must be a string'),
-  body('tags')
-    .optional()
-    .isArray()
-    .withMessage('Tags must be an array')
+  body('tags').optional().isArray().withMessage('Tags must be an array'),
+  body('tags.*').if(body('tags').exists()).trim().escape(), // Escape each tag
 ];
 
 /**
@@ -81,19 +85,25 @@ const itemQueryValidationRules = [
     .optional()
     .isString()
     .withMessage('Sort parameter should be a string in format field:direction')
-    .custom(value => {
+    .custom((value) => {
       const [field, direction] = value.split(':');
-      const validFields = ['name', 'price', 'createdAt', 'updatedAt', 'quantity'];
+      const validFields = [
+        'name',
+        'price',
+        'createdAt',
+        'updatedAt',
+        'quantity',
+      ];
       const validDirections = ['asc', 'desc'];
-      
+
       if (!validFields.includes(field)) {
         throw new Error(`Sort field must be one of: ${validFields.join(', ')}`);
       }
-      
+
       if (direction && !validDirections.includes(direction)) {
         throw new Error('Sort direction must be either "asc" or "desc"');
       }
-      
+
       return true;
     }),
   query('category')
@@ -104,18 +114,20 @@ const itemQueryValidationRules = [
     .optional()
     .isNumeric()
     .withMessage('Minimum price must be a number')
-    .custom(value => value >= 0)
+    .custom((value) => value >= 0)
     .withMessage('Minimum price cannot be negative'),
   query('maxPrice')
     .optional()
     .isNumeric()
     .withMessage('Maximum price must be a number')
-    .custom(value => value >= 0)
+    .custom((value) => value >= 0)
     .withMessage('Maximum price cannot be negative')
     .custom((value, { req }) => {
       const minPrice = req.query.minPrice;
       if (minPrice && parseFloat(value) < parseFloat(minPrice)) {
-        throw new Error('Maximum price must be greater than or equal to minimum price');
+        throw new Error(
+          'Maximum price must be greater than or equal to minimum price',
+        );
       }
       return true;
     }),
@@ -148,15 +160,16 @@ const tagsValidationRules = [
     .withMessage('Each tag must be a string')
     .trim()
     .isLength({ min: 1, max: 50 })
-    .withMessage('Each tag must be between 1 and 50 characters')
+    .withMessage('Each tag must be between 1 and 50 characters'),
 ];
 
 /**
- * Book validation rules
+ * Book validation rules with sanitization
  */
 const bookValidationRules = [
   body('title')
     .trim()
+    .escape() // Escape HTML
     .not()
     .isEmpty()
     .withMessage('Title is required')
@@ -164,11 +177,15 @@ const bookValidationRules = [
     .withMessage('Title must be less than 200 characters'),
   body('author')
     .trim()
+    .escape() // Escape HTML
     .not()
     .isEmpty()
     .withMessage('Author is required')
     .isLength({ max: 100 })
     .withMessage('Author must be less than 100 characters'),
+  body('description').optional().trim().escape(), // Escape HTML in description
+  body('isbn').optional().trim().escape(),
+  body('genre').optional().trim().escape(),
 ];
 
 /**
@@ -203,7 +220,7 @@ exports.validateItemUpdate = [
     .optional()
     .isNumeric()
     .withMessage('Price must be a number')
-    .custom(value => value >= 0)
+    .custom((value) => value >= 0)
     .withMessage('Price cannot be negative'),
   body('quantity')
     .optional()
@@ -218,15 +235,16 @@ exports.validateItemUpdate = [
     .trim()
     .isString()
     .withMessage('Category must be a string'),
-  body('tags')
-    .optional()
-    .isArray()
-    .withMessage('Tags must be an array'),
+  body('tags').optional().isArray().withMessage('Tags must be an array'),
   validate,
 ];
 exports.validateItemQuery = itemQueryValidationRules;
 // Export the tags validators
-exports.validateTags = [...itemIdValidationRules, ...tagsValidationRules, validate];
+exports.validateTags = [
+  ...itemIdValidationRules,
+  ...tagsValidationRules,
+  validate,
+];
 
 // Book middleware exports
 exports.validateBook = [...bookValidationRules, validate];

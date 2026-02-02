@@ -5,7 +5,6 @@ document
       // Get the email from the URL
       const urlParams = new URLSearchParams(window.location.search);
       const email = urlParams.get('email');
-      // console.log(email);
       if (!email) {
         document.getElementById('message').textContent =
           'No email found in the URL.';
@@ -28,11 +27,9 @@ document
         body: JSON.stringify({ email }),
       });
 
-      const data = await response.text();
-      console.log('Unsubscribe response:', data);
-      document.getElementById('message').textContent = data;
-    } catch (error) {
-      console.error('Error unsubscribing:', error);
+      const data = await response.json();
+      document.getElementById('message').textContent = data.message || data;
+    } catch {
       document.getElementById('message').textContent =
         'An error occurred while unsubscribing.';
     }

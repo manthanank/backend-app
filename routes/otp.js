@@ -1,6 +1,56 @@
 const express = require('express');
 const router = express.Router();
+const { query, validationResult } = require('express-validator');
 const { sendOTP, verifyOTP } = require('../controllers/otpController');
+const { otpLimiter } = require('../middleware/rateLimiters');
+
+// Validation middleware
+const validate = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      error: 'Validation error',
+      details: errors.array(),
+    });
+  }
+  next();
+};
+
+// Validation rules for sendOTP with sanitization
+const sendOTPValidation = [
+  query('email')
+    .trim()
+    .notEmpty()
+    .withMessage('Email is required')
+    .isEmail()
+    .withMessage('Invalid email format')
+    .normalizeEmail()
+    .escape(), // Escape HTML characters
+  validate,
+];
+
+// Validation rules for verifyOTP with sanitization
+const verifyOTPValidation = [
+  query('email')
+    .trim()
+    .notEmpty()
+    .withMessage('Email is required')
+    .isEmail()
+    .withMessage('Invalid email format')
+    .normalizeEmail()
+    .escape(), // Escape HTML characters
+  query('otp')
+    .trim()
+    .notEmpty()
+    .withMessage('OTP is required')
+    .isLength({ min: 6, max: 6 })
+    .withMessage('OTP must be 6 digits')
+    .isNumeric()
+    .withMessage('OTP must be numeric')
+    .escape(), // Escape HTML characters
+  validate,
+];
 
 /**
  * @swagger
@@ -46,7 +96,7 @@ const { sendOTP, verifyOTP } = require('../controllers/otpController');
  *                 error:
  *                   type: string
  */
-router.get('/sendOTP', sendOTP);
+router.get('/sendOTP', otpLimiter, sendOTPValidation, sendOTP);
 
 /**
  * @swagger
@@ -102,6 +152,6 @@ router.get('/sendOTP', sendOTP);
  *                 error:
  *                   type: string
  */
-router.get('/verifyOTP', verifyOTP);
+router.get('/verifyOTP', otpLimiter, verifyOTPValidation, verifyOTP);
 
 module.exports = router;

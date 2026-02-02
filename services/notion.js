@@ -1,5 +1,6 @@
 require('dotenv').config();
 const { Client } = require('@notionhq/client');
+const logger = require('../logger');
 
 // Init client
 const notion = new Client({
@@ -22,7 +23,7 @@ async function getDataSourceId() {
     const response = await notion.databases.retrieve({
       database_id: database_id,
     });
-    
+
     if (response.data_sources && response.data_sources.length > 0) {
       dataSourceId = response.data_sources[0].id;
       return dataSourceId;
@@ -30,7 +31,7 @@ async function getDataSourceId() {
       throw new Error('No data sources found for database');
     }
   } catch (error) {
-    console.error('Failed to fetch data source ID:', error);
+    logger.error('Failed to fetch data source ID:', error);
     throw error;
   }
 }
@@ -62,9 +63,9 @@ module.exports = {
       path: 'pages',
       method: 'POST',
       body: {
-        parent: { 
+        parent: {
           type: 'data_source_id',
-          data_source_id: sourceId 
+          data_source_id: sourceId,
         },
         properties: {
           Note: {
@@ -92,7 +93,7 @@ module.exports = {
         note: note,
       };
     } catch (error) {
-      console.error('Error creating note:', error.body);
+      logger.error('Error creating note:', error.body);
       throw error;
     }
   },
@@ -106,7 +107,7 @@ module.exports = {
       };
       return note;
     } catch (error) {
-      console.error(`Failed to retrieve note with ID ${id}: ${error}`);
+      logger.error(`Failed to retrieve note with ID ${id}:`, error);
       throw error;
     }
   },
@@ -134,7 +135,7 @@ module.exports = {
       });
       return response;
     } catch (error) {
-      console.error(`Failed to update note with ID ${id}: ${error}`);
+      logger.error(`Failed to update note with ID ${id}:`, error);
       throw error;
     }
   },
@@ -146,7 +147,7 @@ module.exports = {
       });
       return response;
     } catch (error) {
-      console.error(`Failed to delete note with ID ${id}: ${error}`);
+      logger.error(`Failed to delete note with ID ${id}:`, error);
       throw error;
     }
   },

@@ -22,9 +22,9 @@ const errorHandler = (err, req, res, next) => {
   if (err.name === 'ValidationError') {
     errorResponse.statusCode = 400;
     errorResponse.message = 'Validation failed';
-    errorResponse.errors = Object.values(err.errors).map(val => ({
+    errorResponse.errors = Object.values(err.errors).map((val) => ({
       field: val.path,
-      message: val.message
+      message: val.message,
     }));
     return res.status(400).json(errorResponse);
   }
@@ -62,7 +62,7 @@ const errorHandler = (err, req, res, next) => {
     return res.status(err.statusCode).json({
       status: 'error',
       message: err.message,
-      ...(err.errors && { errors: err.errors })
+      ...(err.errors && { errors: err.errors }),
     });
   }
 
@@ -74,13 +74,12 @@ const errorHandler = (err, req, res, next) => {
   // Generic server error
   res.status(errorResponse.statusCode).json({
     status: 'error',
-    message: process.env.NODE_ENV === 'production' 
-      ? 'Something went wrong'
-      : errorResponse.message,
-    ...(process.env.NODE_ENV !== 'production' && { stack: err.stack })
+    message:
+      process.env.NODE_ENV === 'production'
+        ? 'Something went wrong'
+        : errorResponse.message,
+    ...(process.env.NODE_ENV !== 'production' && { stack: err.stack }),
   });
 };
-
-module.exports = errorHandler;
 
 module.exports = errorHandler;

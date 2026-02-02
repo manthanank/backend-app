@@ -32,13 +32,16 @@ const bookSchema = new mongoose.Schema(
       trim: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // Add indexes for faster queries
 bookSchema.index({ title: 1 });
 bookSchema.index({ author: 1 });
 bookSchema.index({ publishedYear: 1 });
+bookSchema.index({ isbn: 1 }, { unique: true, sparse: true }); // Unique ISBN if provided
+bookSchema.index({ title: 1, author: 1 }); // Compound index for title + author searches
+bookSchema.index({ title: 'text', description: 'text' }); // Full-text search
 
 const Book = mongoose.model('Book', bookSchema);
 

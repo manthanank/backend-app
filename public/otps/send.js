@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await fetch(`${apiEndpoint}/sendOTP?email=${email}`);
 
       const result = await response.json();
-      // console.log(result);
       alert(result.message);
       if (result.success) {
         window.location.href = 'verify.html';

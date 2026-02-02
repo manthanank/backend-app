@@ -8,10 +8,37 @@ const options = {
       title: 'Backend App API',
       version: '1.0.0',
       description: 'API documentation for the Backend App',
+      contact: {
+        name: 'Manthan Ankolekar',
+        url: 'https://github.com/manthanank',
+      },
+      license: {
+        name: 'MIT',
+        url: 'https://opensource.org/licenses/MIT',
+      },
     },
-    basePath: '/api',
+    servers: [
+      {
+        url: 'http://localhost:3000/api/v1',
+        description: 'Development server (v1)',
+      },
+      {
+        url: 'http://localhost:3000/api',
+        description: 'Development server (legacy - deprecated)',
+      },
+      {
+        url: 'https://backend-app-manthanank.vercel.app/api/v1',
+        description: 'Production server (v1)',
+      },
+    ],
+    basePath: '/api/v1',
   },
-  apis: ['./routes/*.js', './controllers/*.js', './models/*.js'],
+  apis: [
+    './routes/*.js',
+    './routes/v1/*.js',
+    './controllers/*.js',
+    './models/*.js',
+  ],
 };
 
 const specs = swaggerJsdoc(options);

@@ -1,5 +1,7 @@
 const Subscribers = require('../models/subscribers.js');
-const { sendNewsletter } = require('../utils/newsletter.js');
+const emailService = require('../services/emailService.js');
+const logger = require('../logger');
+const { PAGINATION, HTTP_STATUS, EMAIL } = require('../config/constants');
 
 exports.createSubscribers = async (req, res, next) => {
   const email = req.body.email;
@@ -8,31 +10,37 @@ exports.createSubscribers = async (req, res, next) => {
     const existingSubscriber = await Subscribers.findOne({ email });
 
     if (existingSubscriber) {
-      return res.send(
-        'Email already subscribed. Check your email for the welcome newsletter.',
-      );
+      return res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message:
+          'Email already subscribed. Check your email for the welcome newsletter.',
+      });
     }
 
     const newSubscriber = new Subscribers({ email });
     await newSubscriber.save();
 
-    console.log(`New subscription: ${email}`);
+    logger.info(`New subscription: ${email}`);
 
-    const welcomeSubject = 'Welcome to Our Newsletter!';
+    const welcomeSubject = EMAIL.NEWSLETTER_WELCOME_SUBJECT;
     let welcomeContent = '<p>Thank you for subscribing to our newsletter!</p>';
-    const apiEndpoint =
-      req.get('host') === 'localhost:3000'
-        ? 'http://localhost:3000'
-        : 'https://backend-app-manthanank.vercel.app/';
+
+    // Construct API endpoint from environment variables
+    const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
+    const domain = process.env.DOMAIN || req.get('host') || 'localhost:3000';
+    const apiEndpoint = `${protocol}://${domain}`;
 
     welcomeContent += `<p><a href="${apiEndpoint}/unsubscribe?email=${email}">Unsubscribe</a></p>`;
-    sendNewsletter(email, welcomeSubject, welcomeContent);
+    await emailService.sendNewsletter(email, welcomeSubject, welcomeContent);
 
-    res.send(
-      'Subscription successful! Check your email for a welcome newsletter.',
-    );
+    res.status(HTTP_STATUS.CREATED).json({
+      success: true,
+      message:
+        'Subscription successful! Check your email for a welcome newsletter.',
+      data: { email },
+    });
   } catch (error) {
-    console.error('Error creating subscription:', error);
+    logger.error('Error creating subscription:', error);
     next(error);
   }
 };
@@ -44,41 +52,53 @@ exports.unsubscribe = async (req, res, next) => {
     const existingSubscriber = await Subscribers.findOne({ email });
 
     if (!existingSubscriber) {
-      return res.send('Email not subscribed.');
+      return res.status(HTTP_STATUS.NOT_FOUND).json({
+        success: false,
+        message: 'Email not subscribed.',
+      });
     }
 
     await Subscribers.findOneAndDelete({ email });
 
-    console.log(`Subscription deleted: ${email}`);
+    logger.info(`Subscription deleted: ${email}`);
 
-    res.send('Unsubscribed successfully.');
+    res.status(HTTP_STATUS.OK).json({
+      success: true,
+      message: 'Unsubscribed successfully.',
+      data: { email },
+    });
   } catch (error) {
-    console.error('Error unsubscribing:', error);
+    logger.error('Error unsubscribing:', error);
     next(error);
   }
 };
 
 exports.getSubscribers = async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const ITEMS_PER_PAGE = 10;
+  const page = parseInt(req.query.page) || PAGINATION.DEFAULT_PAGE;
+  const itemsPerPage = parseInt(req.query.limit) || PAGINATION.DEFAULT_LIMIT;
 
   try {
     const [totalSubscribers, data] = await Promise.all([
       Subscribers.countDocuments(),
       Subscribers.find({})
-        .skip((page - 1) * ITEMS_PER_PAGE)
-        .limit(ITEMS_PER_PAGE),
+        .skip((page - 1) * itemsPerPage)
+        .limit(itemsPerPage),
     ]);
 
-    res.status(200).json({
+    res.status(HTTP_STATUS.OK).json({
       success: true,
       message: 'Subscribers retrieved successfully',
       data,
       count: data.length,
       totalSubscribers,
+      pagination: {
+        currentPage: page,
+        itemsPerPage,
+        totalPages: Math.ceil(totalSubscribers / itemsPerPage),
+      },
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: 'Internal Server Error',
       error: error.message,
@@ -92,15 +112,15 @@ exports.deleteSubscriber = async (req, res) => {
 
     if (!data) {
       return res
-        .status(404)
+        .status(HTTP_STATUS.NOT_FOUND)
         .json({ success: false, message: 'Subscriber not found' });
     }
 
     res
-      .status(200)
+      .status(HTTP_STATUS.OK)
       .json({ success: true, message: 'Subscriber deleted successfully' });
   } catch (error) {
-    res.status(500).json({
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: 'Internal Server Error',
       error: error.message,
