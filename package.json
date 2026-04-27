@@ -37,7 +37,7 @@
   "license": "MIT",
   "dependencies": {
     "@notionhq/client": "^5.19.0",
-    "axios": "^1.15.1",
+    "axios": "^1.15.2",
     "compression": "^1.8.1",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
